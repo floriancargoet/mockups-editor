@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
+import { DraggableCore } from 'react-draggable';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import classnames from 'classnames';
 
 import * as components from '../mockup-components/all';
 
@@ -65,52 +67,101 @@ class ComponentWrapper extends Component {
       selected,
       ...otherProps
     } = this.props;
+    const { width, height, resizing } = this.state;
 
     const MockupComponent = components[config.type];
-    const component = <MockupComponent {...config} />;
-
+    const component = <MockupComponent {...config} width={width} height={height} />;
+    const classNames = classnames({
+      'mockup-component-wrapper': true,
+      'mockup-component-wrapper_resizing': resizing,
+      'mockup-component-wrapper_selected': selected
+    });
     return (
-      <svg
+      <svg className={classNames}
         {...otherProps}
         x={config.x} y = {config.y}
-        width={config.width} height={config.height}
+        width={width} height={height}
         style={getStyles(this.props)}
       >
-        {connectDragSource(<g>{component}</g>)}
-        {this.renderSelectionBorder(selected)}
+        {connectDragSource(
+          <g>
+            {this.renderBackground()}
+            {component}
+            {this.renderBorder()}
+          </g>
+        )}
+        {this.renderResizer()}
       </svg>
     );
   }
 
-  renderSelectionBorder(selected) {
-    if (!selected) {
-      return null;
-    }
+  renderBackground() {
+    // fill=transparent makes :hover works
     return (
-      <rect
-        x="0" y="0" width="100%" height="100%" strokeDasharray="10, 5"
-        strokeWidth="3" stroke="#333" fill="none"
+      <rect className="mockup-component-wrapper-background"
+        x="0" y="0" width="100%" height="100%" fill="transparent"
       />
     );
   }
 
-  onResizeStart = (ev, { size }) => {
+  renderBorder() {
+    // fill=transparent makes :hover works
+    return (
+      <rect className="mockup-component-wrapper-border"
+        x="0" y="0" width="100%" height="100%" fill="none"
+      />
+    );
+  }
+
+  renderResizer() {
+    return (
+      <DraggableCore
+        onStart={this.onResizeStart}
+        onDrag={this.onResize}
+        onStop={this.onResizeStop}
+      >
+        <rect className="mockup-component-wrapper-resize-handle"
+          x={this.state.width - 25} y={this.state.height - 25}
+          width="15" height="15"
+        />
+      </DraggableCore>
+    );
+  }
+
+
+  onResizeStart = (ev, { position }) => {
+    this.startX = position.clientX;
+    this.startY = position.clientY;
     this.setState({
       resizing: true
     });
   }
 
-  onResize = (ev, { size }) => {
+  onResize = (ev, { position }) => {
+    const { width, height } = this.props.config;
+    const dx = position.clientX - this.startX;
+    const dy = position.clientY - this.startY;
+
     this.setState({
-      ...size
+      width: Math.max(35, width + dx),
+      height: Math.max(35, height + dy)
     });
   }
 
-  onResizeStop = (ev, info) => {
+  onResizeStop = (ev, { position }) => {
     this.setState({
       resizing: false
     });
-    this.props.onResize(ev, info);
+
+    const { width, height } = this.props.config;
+    const dx = position.clientX - this.startX;
+    const dy = position.clientY - this.startY;
+    delete this.startX;
+    delete this.startY;
+    this.props.onResize(ev, {
+      width: Math.max(35, width + dx),
+      height: Math.max(35, height + dy)
+    });
   }
 
 }

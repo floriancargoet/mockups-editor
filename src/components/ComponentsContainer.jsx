@@ -75,7 +75,7 @@ class ComponentsContainer extends React.Component {
       };
       return c.type === '__Group__'
         ? <GroupWrapper {...props} />
-        : <ComponentWrapper {...props} onResize={(ev, { size }) => this.onResize(id, size)} />;
+        : <ComponentWrapper {...props} onResize={(ev, size) => this.onResize(id, size)} />;
     });
   }
 
