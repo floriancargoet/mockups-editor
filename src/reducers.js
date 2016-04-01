@@ -19,7 +19,23 @@ const defaultComponent = { // TODO: move to action creator?
   }
 };
 
-
+function cascadeUpdateChildren(item, cb) {
+  return update(item, {
+    children: {
+      $apply: function (children) {
+        if (!children) {
+          return children;
+        }
+        return children.map(c => {
+          if (c.children) {
+            c = cascadeUpdateChildren(c, cb);
+          }
+          return cb(c);
+        });
+      }
+    }
+  });
+}
 /*
 {
   components: [component...],
@@ -35,19 +51,13 @@ function components(state = [], action) {
     case MOVE_COMPONENT: {
       if (state[index].type === '__Group__') {
         // update children instead of group
-        return update(state, {
-          [index]: {
-            children: {
-              $apply: function (children) {
-                return children.map(c => ({
-                  ...c,
-                  x: c.x + action.x,
-                  y: c.y + action.y
-                }));
-              }
-            }
-          }
-        });
+        return state.map(item => cascadeUpdateChildren(item, c => {
+          return c.type === '__Group__' ? c : {
+            ...c,
+            x: c.x + action.x,
+            y: c.y + action.y
+          };
+        }));
       }
       return update(state, {
         [index]: {

@@ -61,13 +61,20 @@ class GroupWrapper extends Component {
         {...otherProps}
         style={getStyles(this.props)}
       >
-        {this.renderChildComponents()}
+        {this.renderChildComponents(config.children)}
       </g>
     );
   }
 
-  renderChildComponents() {
-    return this.props.config.children.map((c) => {
+  renderChildComponents(childComponents) {
+    return childComponents.map((c) => {
+      if (c.type === '__Group__') {
+        return (
+          <g key={c.id}>
+            {this.renderChildComponents(c.children)}
+          </g>
+        );
+      }
       const MockupComponent = components[c.type];
       return (
         <svg key={c.id}
@@ -76,7 +83,8 @@ class GroupWrapper extends Component {
         >
           <MockupComponent {...c} />
           {this.renderSelectionBorder(this.props.selected)}
-        </svg>);
+        </svg>
+      );
     });
   }
 

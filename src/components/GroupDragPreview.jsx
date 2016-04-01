@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import * as components from '../mockup-components/all';
 
-export default class GroupDropPreview extends Component {
+export default class GroupDragPreview extends Component {
 
   static propTypes = {
     item: PropTypes.object.isRequired
@@ -10,14 +10,20 @@ export default class GroupDropPreview extends Component {
   render() {
     return (
       <g>
-        {this.renderChildComponents()}
+        {this.renderChildComponents(this.props.item.config.children)}
       </g>
     );
   }
 
-  renderChildComponents() {
-    const config = this.props.item.config;
-    return config.children.map((c) => {
+  renderChildComponents(childComponents) {
+    return childComponents.map((c) => {
+      if (c.type === '__Group__') {
+        return (
+          <g key={c.id}>
+            {this.renderChildComponents(c.children)}
+          </g>
+        );
+      }
       const MockupComponent = components[c.type];
       return (
         <svg key={c.id}
