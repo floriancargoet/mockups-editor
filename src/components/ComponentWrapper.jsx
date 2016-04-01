@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { ResizableBox } from 'react-resizable';
-import classnames from 'classnames';
 
 import * as components from '../mockup-components/all';
 
@@ -14,18 +12,11 @@ const boxSource = {
 };
 
 function getStyles(props) {
-  const { config, isDragging } = props;
-  const transform = `translate3d(${config.x}px, ${config.y}px, 0)`;
+  const { isDragging } = props;
 
   return {
-    position: 'absolute',
     cursor: 'move',
-    transform: transform,
-    WebkitTransform: transform,
-    // IE fallback: hide the real node using CSS when dragging
-    // because IE will ignore our custom "empty image" drag preview.
     opacity: isDragging ? 0.5 : 1
-    // height: isDragging ? 0 : ''
   };
 }
 
@@ -36,10 +27,9 @@ class ComponentWrapper extends Component {
     connectDragPreview: PropTypes.func.isRequired,
     isDragging: PropTypes.bool.isRequired,
 
-    onResize: PropTypes.func.isRequired,
-    selected: PropTypes.bool.isRequired,
+    id: PropTypes.any.isRequired,
     config: PropTypes.object.isRequired,
-    id: PropTypes.any.isRequired
+    selected: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -71,33 +61,38 @@ class ComponentWrapper extends Component {
   render() {
     const { // list all props to remove from otherProps
       connectDragSource,
-      onResize,
       config,
+      selected,
       ...otherProps
     } = this.props;
 
-    const classNames = classnames({
-      'mockup-component-wrapper': true,
-      'mockup-component-wrapper_resizing': this.state.resizing,
-      'mockup-component-wrapper_selected': this.props.selected
-    });
-
-    const ComponentClass = components[config.type];
-    const component = <ComponentClass {...config} />;
+    const MockupComponent = components[config.type];
+    const component = <MockupComponent {...config} />;
 
     return (
-      <ResizableBox
+      <svg
         {...otherProps}
-        className={classNames}
-        onResize={this.onResize} onResizeStart={this.onResizeStart} onResizeStop={this.onResizeStop}
-        width={this.state.width} height={this.state.height}
-        style={{ ...getStyles(this.props), width: this.state.width, height: this.state.height }}
+        x={config.x} y = {config.y}
+        width={config.width} height={config.height}
+        style={getStyles(this.props)}
       >
-        {connectDragSource(<div className="draggable">{component}</div>)}
-      </ResizableBox>
+        {connectDragSource(<g>{component}</g>)}
+        {this.renderSelectionBorder(selected)}
+      </svg>
     );
   }
 
+  renderSelectionBorder(selected) {
+    if (!selected) {
+      return null;
+    }
+    return (
+      <rect
+        x="0" y="0" width="100%" height="100%" strokeDasharray="10, 5"
+        strokeWidth="3" stroke="#333" fill="none"
+      />
+    );
+  }
 
   onResizeStart = (ev, { size }) => {
     this.setState({

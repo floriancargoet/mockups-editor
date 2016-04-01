@@ -5,7 +5,7 @@ import {
   clearSelection
 } from '../actions';
 
-import Workspace from '../components/Workspace.jsx';
+import ComponentsContainer from '../components/ComponentsContainer.jsx';
 
 const mapStateToProps = (state) => {
   return {
@@ -32,15 +32,15 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(selectOneComponent(id));
       }
     },
-    onWorkspaceClicked: () => {
+    onComponentsContainerClicked: () => {
       dispatch(clearSelection());
     }
   };
 };
 
-const ConnectedWorkspace = connect(
+const ConnectedComponentsContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Workspace);
+)(ComponentsContainer);
 
-export default ConnectedWorkspace;
+export default ConnectedComponentsContainer;

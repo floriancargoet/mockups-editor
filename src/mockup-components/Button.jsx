@@ -1,12 +1,16 @@
 import React from 'react';
 
 const Button = ({ width, height, properties }) => (
-  <div
-    className="mockup-component mockup-button"
-    style={{ width, height }}
-  >
-    <button style={{ width: '100%', height: '100%' }}>roperties.text}</button>
-  </div>
+  <svg height={height} width={width}>
+    <rect x="0" y="0"
+      height={height} width={width}
+      style={{
+        fill: properties.backgroundColor,
+        stroke: '#000'
+      }}
+    />
+    <text x="50%" y="50%" textAnchor="middle">{properties.text}</text>
+  </svg>
 );
 
 Button.propTypes = {

@@ -1,13 +1,9 @@
 import React from 'react';
 
 const Title = ({ width, height, properties }) => (
-  <div className="mockup-component mockup-title" style={{
-    width, height,
-    fontSize: 20,
-    textAlign: 'center'
-  }}>
-    {properties.text}
-  </div>
+  <svg height={height} width={width}>
+    <text x="50%" y="50%" textAnchor="middle" fontSize={20}>{properties.text}</text>
+  </svg>
 );
 
 Title.propTypes = {

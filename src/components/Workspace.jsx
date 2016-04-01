@@ -1,77 +1,46 @@
 import React from 'react';
-import ComponentWrapper from './ComponentWrapper.jsx';
-import GroupWrapper from './GroupWrapper.jsx';
-import { DropTarget } from 'react-dnd';
+import ReactDOM from 'react-dom';
 
+import { DragDropContext } from 'react-dnd';
+// import HTML5Backend from 'react-dnd-html5-backend';
+import { default as TouchBackend } from 'react-dnd-touch-backend';
+import CustomDragLayer from './CustomDragLayer.jsx';
 
-const boxTarget = {
-  drop(props, monitor, component) {
-    const item = monitor.getItem();
-    const delta = monitor.getDifferenceFromInitialOffset();
-    const left = Math.round(item.left + delta.x);
-    const top = Math.round(item.top + delta.y);
-
-    props.onComponentMoved(item.id, left, top);
-  }
-};
+import ComponentsContainer from '../containers/ComponentsContainer';
 
 class Workspace extends React.Component {
-
-  static propTypes = {
-    connectDropTarget: React.PropTypes.func.isRequired,
-    components: React.PropTypes.array.isRequired,
-    selection: React.PropTypes.array.isRequired,
-    onWorkspaceClicked: React.PropTypes.func.isRequired,
-    onComponentResized: React.PropTypes.func.isRequired,
-    onComponentMoved: React.PropTypes.func.isRequired,
-    onComponentClicked: React.PropTypes.func.isRequired
-  }
-
-  static defaultProps = {
-  }
 
   constructor(props) {
     super(props);
     this.state = {
+      width: 0,
+      height: 0
     };
   }
 
   render() {
-    const { connectDropTarget, onWorkspaceClicked } = this.props;
-    return connectDropTarget(
-      <div className="workspace" onClick={onWorkspaceClicked}>
-        { this.renderComponents(this.props.components) }
-      </div>
+    return (
+      <svg
+        height="100%"
+        width="100%"
+      >
+        <ComponentsContainer width={this.state.width} height={this.state.height} />
+        <CustomDragLayer />
+      </svg>
     );
   }
 
-  renderComponents(components) {
-    return components.map(c => {
-      const id = c.id;
-      const props = {
-        key: id,
-        id: id,
-        config: c,
-        selected: this.props.selection.includes(id),
-        onClick: (ev) => {
-          ev.stopPropagation();
-          this.props.onComponentClicked(id, ev);
-        }
-      };
-      return c.type === '__Group__'
-        ? <GroupWrapper {...props} />
-        : <ComponentWrapper {...props} onResize={(ev, { size }) => this.onResize(id, size)} />;
+  componentDidMount() {
+    /* eslint-disable react/no-did-mount-set-state */
+    const el = ReactDOM.findDOMNode(this);
+    this.setState({
+      width: el.clientWidth,
+      height: el.clientHeight
     });
-  }
-
-  onResize = (id, size) => {
-    this.props.onComponentResized(id, size.width, size.height);
   }
 }
 
-const DropTargetDecorator = DropTarget('mockup-component', boxTarget, connect => ({
-  // injected props
-  connectDropTarget: connect.dropTarget()
-}));
 
-export default DropTargetDecorator(Workspace);
+const DDCDecorator = DragDropContext(TouchBackend({ enableMouseEvents: true }));
+
+export default DDCDecorator((Workspace));

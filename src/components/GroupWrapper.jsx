@@ -1,30 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import classnames from 'classnames';
 
 import * as components from '../mockup-components/all';
 
 const boxSource = {
   beginDrag(props) {
     const { id, config } = props;
-    return { id, left: config.x, top: config.y };
+    return { id, config, left: config.x, top: config.y };
   }
 };
 
 function getStyles(props) {
-  const { config, isDragging } = props;
-  const transform = `translate3d(${config.x}px, ${config.y}px, 0)`;
+  const { isDragging } = props;
 
   return {
-    position: 'absolute',
     cursor: 'move',
-    transform: transform,
-    WebkitTransform: transform,
-    // IE fallback: hide the real node using CSS when dragging
-    // because IE will ignore our custom "empty image" drag preview.
     opacity: isDragging ? 0.5 : 1
-    // height: isDragging ? 0 : ''
   };
 }
 
@@ -58,36 +50,51 @@ class GroupWrapper extends Component {
 
   render() {
     const { // list all props to remove from otherProps
-      config, selected,
       connectDragSource,
+      config,
+      selected,
       ...otherProps
     } = this.props;
 
-    const classNames = classnames({
-      draggable: true,
-      'mockup-group-wrapper': true,
-      'mockup-group-wrapper_selected': selected
-    });
-
-    return connectDragSource(<div {...otherProps} className={classNames}
-      style={{
-        ...getStyles(this.props),
-        width: config.width, height: config.height
-      }}>
-      {this.renderChildComponents()}
-    </div>);
+    return connectDragSource(
+      <g
+        {...otherProps}
+        style={getStyles(this.props)}
+      >
+        {this.renderChildComponents()}
+      </g>
+    );
   }
 
   renderChildComponents() {
-    return this.props.config.children.map((c, i) => {
+    return this.props.config.children.map((c) => {
       const MockupComponent = components[c.type];
-      return <MockupComponent key={i} {...c} />;
+      return (
+        <svg key={c.id}
+          x={c.x} y = {c.y}
+          width={c.width} height={c.height}
+        >
+          <MockupComponent {...c} />
+          {this.renderSelectionBorder(this.props.selected)}
+        </svg>);
     });
+  }
+
+  renderSelectionBorder(selected) {
+    if (!selected) {
+      return null;
+    }
+    return (
+      <rect
+        x="0" y="0" width="100%" height="100%" strokeDasharray="10, 5"
+        strokeWidth="3" stroke="#333" fill="none"
+      />
+    );
   }
 
 }
 
-export default DragSource('mockup-component', boxSource, (connect, monitor) => ({
+export default DragSource('mockup-group', boxSource, (connect, monitor) => ({
   // injected props
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),

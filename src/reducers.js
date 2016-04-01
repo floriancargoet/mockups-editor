@@ -33,6 +33,22 @@ function components(state = [], action) {
   switch (action.type) {
 
     case MOVE_COMPONENT: {
+      if (state[index].type === '__Group__') {
+        // update children instead of group
+        return update(state, {
+          [index]: {
+            children: {
+              $apply: function (children) {
+                return children.map(c => ({
+                  ...c,
+                  x: c.x + action.x,
+                  y: c.y + action.y
+                }));
+              }
+            }
+          }
+        });
+      }
       return update(state, {
         [index]: {
           $merge: {

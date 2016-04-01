@@ -1,40 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import ComponentDragPreview from './ComponentDragPreview.jsx';
+import GroupDragPreview from './GroupDragPreview.jsx';
 import { DragLayer } from 'react-dnd';
-
-const layerStyles = {
-  position: 'fixed',
-  pointerEvents: 'none',
-  zIndex: 100,
-  left: 0,
-  top: 0,
-  width: '100%',
-  height: '100%'
-};
-
-function getItemStyles(props) {
-  const { initialOffset, currentOffset } = props;
-  if (!initialOffset || !currentOffset) {
-    return {
-      display: 'none'
-    };
-  }
-  const transform = `translate(${currentOffset.x}px, ${currentOffset.y}px)`;
-  return {
-    transform: transform,
-    WebkitTransform: transform
-  };
-}
 
 class CustomDragLayer extends Component {
   static propTypes = {
     item: PropTypes.object,
     itemType: PropTypes.string,
-    initialOffset: PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired
-    }),
-    currentOffset: PropTypes.shape({
+    offset: PropTypes.shape({
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired
     }),
@@ -47,24 +20,28 @@ class CustomDragLayer extends Component {
         return (
           <ComponentDragPreview item={item}/>
         );
+      case 'mockup-group':
+        return (
+          <GroupDragPreview item={item}/>
+        );
       default:
         return null;
     }
   }
 
   render() {
-    const { item, itemType, isDragging } = this.props;
+    const { item, itemType, isDragging, offset } = this.props;
 
-    if (!isDragging) {
-      //return null;
+    if (!isDragging || !offset) {
+      return null;
     }
-
+    const x = offset.x + item.config.x;
+    const y = offset.y + item.config.y;
+    const transform = `translate(${x}, ${y})`;
     return (
-      <div style={layerStyles}>
-        <div style={getItemStyles(this.props)}>
-          {this.renderItem(itemType, item)}
-        </div>
-      </div>
+      <g transform={transform}>
+        {this.renderItem(itemType, item)}
+      </g>
     );
   }
 }
@@ -73,8 +50,7 @@ class CustomDragLayer extends Component {
 const DLDecorator = DragLayer(monitor => ({
   item: monitor.getItem(),
   itemType: monitor.getItemType(),
-  initialOffset: monitor.getInitialSourceClientOffset(),
-  currentOffset: monitor.getSourceClientOffset(),
+  offset: monitor.getDifferenceFromInitialOffset(),
   isDragging: monitor.isDragging()
 }));
 
