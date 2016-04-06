@@ -22,7 +22,8 @@ const Toolbar = ({ onButtonClicked, selection, selectionContainsGroup }) => {
 
 Toolbar.propTypes = {
   onButtonClicked: React.PropTypes.func.isRequired,
-  selection: React.PropTypes.array.isRequired
+  selection: React.PropTypes.array.isRequired,
+  selectionContainsGroup: React.PropTypes.bool.isRequired
 };
 
 export default Toolbar;

@@ -53,20 +53,24 @@ body {
   visibility: hidden;
 }
 .mockup-component-wrapper_resizing .mockup-component-wrapper-resize-handle,
-.mockup-component-wrapper:hover .mockup-component-wrapper-resize-handle {
+.mockup-component-wrapper_selected .mockup-component-wrapper-resize-handle {
   visibility: visible;
 }
 
 .mockup-component-wrapper-border {
   stroke-width: 0;
-  stroke: #333;
+  stroke: #000;
 }
 .mockup-component-wrapper:hover .mockup-component-wrapper-border,
 .mockup-component-wrapper_resizing .mockup-component-wrapper-border,
 .mockup-component-wrapper_selected .mockup-component-wrapper-border {
-  stroke-width: 3;
+  stroke-width: 2;
 }
 
 .mockup-component-wrapper_selected .mockup-component-wrapper-border {
   stroke-dasharray: 10, 5;
+}
+
+.mockup-component-wrapper-resize-handle {
+  cursor: se-resize;
 }

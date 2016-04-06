@@ -12,13 +12,15 @@ export default class Editor extends React.Component {
       <div className="editor">
         <Layout type="column">
           <Fixed style={{ height: 20 }}><Toolbar /></Fixed>
-          <Fixed style={{ height: 150 }}><Debugger /></Fixed>
           <Flex>
             <Layout type="row">
               <Flex style={{ height: '100%', overflow: 'hidden' /* fix SVG quirk */ }}>
                 <Workspace />
               </Flex>
-              <Fixed style={{ width: 250 }}><PropertyEditor /></Fixed>
+              <Fixed style={{ width: 250 }}>
+                <Debugger />
+                <PropertyEditor />
+              </Fixed>
             </Layout>
           </Flex>
         </Layout>

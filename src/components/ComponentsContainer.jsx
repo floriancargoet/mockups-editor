@@ -80,7 +80,7 @@ class ComponentsContainer extends React.Component {
   }
 
   onResize = (id, size) => {
-    this.props.onComponentResized(id, size.width, size.height);
+    this.props.onComponentResized(id, size);
   }
 }
 

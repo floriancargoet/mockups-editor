@@ -16,7 +16,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onComponentResized: (id, width, height) => {
+    onComponentResized: (id, { x, y, width, height }) => {
+      dispatch(moveComponent(id, x, y));
       dispatch(resizeComponent(id, width, height));
       dispatch(selectOneComponent(id));
     },

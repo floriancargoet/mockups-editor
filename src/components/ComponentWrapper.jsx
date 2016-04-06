@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
-import { DraggableCore } from 'react-draggable';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import classnames from 'classnames';
 
+import ResizeHandle from './ResizeHandle.jsx';
 import * as components from '../mockup-components/all';
 
 const boxSource = {
@@ -22,6 +22,52 @@ function getStyles(props) {
   };
 }
 
+function getDelta(direction, dx, dy) {
+  if (direction === 'se') {
+    return {
+      x: 0,
+      y: 0,
+      width: dx,
+      height: dy
+    };
+  }
+  else if (direction === 'nw') {
+    return {
+      x: dx,
+      y: dy,
+      width: -dx,
+      height: -dy
+    };
+  }
+  else if (direction === 'ne') {
+    return {
+      x: 0,
+      y: dy,
+      width: dx,
+      height: -dy
+    };
+  }
+  else if (direction === 'sw') {
+    return {
+      x: dx,
+      y: 0,
+      width: -dx,
+      height: dy
+    };
+  }
+}
+const MIN_SIZE = 10;
+
+function applyDelta(delta, size) {
+  return {
+    x: Math.min(size.x + delta.x, size.x + size.width - MIN_SIZE),
+    y: Math.min(size.y + delta.y, size.y + size.height - MIN_SIZE),
+    width: Math.max(size.width + delta.width, MIN_SIZE),
+    height: Math.max(size.height + delta.height, MIN_SIZE)
+  };
+}
+
+
 class ComponentWrapper extends Component {
 
   static propTypes = {
@@ -31,7 +77,8 @@ class ComponentWrapper extends Component {
 
     id: PropTypes.any.isRequired,
     config: PropTypes.object.isRequired,
-    selected: PropTypes.bool.isRequired
+    selected: PropTypes.bool.isRequired,
+    onResize: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -40,6 +87,8 @@ class ComponentWrapper extends Component {
       // in progress resize is managed in state
       width: props.config.width,
       height: props.config.height,
+      x: props.config.x,
+      y: props.config.y,
       resizing: false
     };
   }
@@ -56,7 +105,8 @@ class ComponentWrapper extends Component {
 
   componentWillReceiveProps({ config }) {
     this.setState({
-      width: config.width, height: config.height
+      width: config.width, height: config.height,
+      x: config.x, y: config.y
     });
   }
 
@@ -67,7 +117,7 @@ class ComponentWrapper extends Component {
       selected,
       ...otherProps
     } = this.props;
-    const { width, height, resizing } = this.state;
+    const { width, height, x, y, resizing } = this.state;
 
     const MockupComponent = components[config.type];
     const component = <MockupComponent {...config} width={width} height={height} />;
@@ -77,59 +127,77 @@ class ComponentWrapper extends Component {
       'mockup-component-wrapper_selected': selected
     });
     return (
-      <svg className={classNames}
+      <g className={classNames}
         {...otherProps}
-        x={config.x} y = {config.y}
-        width={width} height={height}
+        transform={`translate(${x - 10} ${y - 10})`}
+        width={width + 20} height={height + 20}
         style={getStyles(this.props)}
       >
         {connectDragSource(
-          <g>
+          <g transform="translate(10 10)">
             {this.renderBackground()}
             {component}
-            {this.renderBorder()}
           </g>
         )}
-        {this.renderResizer()}
-      </svg>
+        {this.renderBorder()}
+        {this.renderResizers()}
+      </g>
     );
   }
 
   renderBackground() {
     // fill=transparent makes :hover works
+    const { width, height } = this.state;
     return (
       <rect className="mockup-component-wrapper-background"
-        x="0" y="0" width="100%" height="100%" fill="transparent"
+        x="0" y="0" width={width} height={height} fill="transparent"
       />
     );
   }
 
   renderBorder() {
-    // fill=transparent makes :hover works
+    const { width, height } = this.state;
     return (
       <rect className="mockup-component-wrapper-border"
-        x="0" y="0" width="100%" height="100%" fill="none"
+        x="9" y="9" width={width + 2} height={height + 2} fill="none"
       />
     );
   }
 
-  renderResizer() {
-    return (
-      <DraggableCore
-        onStart={this.onResizeStart}
-        onDrag={this.onResize}
-        onStop={this.onResizeStop}
-      >
-        <rect className="mockup-component-wrapper-resize-handle"
-          x={this.state.width - 25} y={this.state.height - 25}
-          width="15" height="15"
-        />
-      </DraggableCore>
-    );
+  renderResizers() {
+    return [
+      <ResizeHandle
+        key="se" position="se"
+        x={this.state.width + 10} y={this.state.height + 10}
+        onResizeStart={this.onResizeStart}
+        onResize={this.onResize}
+        onResizeStop={this.onResizeStop}
+      />,
+      <ResizeHandle
+        key="nw" position="nw"
+        x={0} y={0}
+        onResizeStart={this.onResizeStart}
+        onResize={this.onResize}
+        onResizeStop={this.onResizeStop}
+      />,
+      <ResizeHandle
+        key="ne" position="ne"
+        x={this.state.width + 10} y={0}
+        onResizeStart={this.onResizeStart}
+        onResize={this.onResize}
+        onResizeStop={this.onResizeStop}
+      />,
+      <ResizeHandle
+        key="sw" position="sw"
+        x={0} y={this.state.height + 10}
+        onResizeStart={this.onResizeStart}
+        onResize={this.onResize}
+        onResizeStop={this.onResizeStop}
+      />
+    ];
   }
 
-
-  onResizeStart = (ev, { position }) => {
+  onResizeStart = (handle, ev, { position }) => {
     this.startX = position.clientX;
     this.startY = position.clientY;
     this.setState({
@@ -137,31 +205,28 @@ class ComponentWrapper extends Component {
     });
   }
 
-  onResize = (ev, { position }) => {
-    const { width, height } = this.props.config;
+  onResize = (handle, ev, { position }) => {
     const dx = position.clientX - this.startX;
     const dy = position.clientY - this.startY;
+    const delta = getDelta(handle, dx, dy);
+    const size = applyDelta(delta, this.props.config);
 
-    this.setState({
-      width: Math.max(35, width + dx),
-      height: Math.max(35, height + dy)
-    });
+    this.setState(size);
   }
 
-  onResizeStop = (ev, { position }) => {
+  onResizeStop = (handle, ev, { position }) => {
     this.setState({
       resizing: false
     });
 
-    const { width, height } = this.props.config;
     const dx = position.clientX - this.startX;
     const dy = position.clientY - this.startY;
+    const delta = getDelta(handle, dx, dy);
+    const size = applyDelta(delta, this.props.config);
+
     delete this.startX;
     delete this.startY;
-    this.props.onResize(ev, {
-      width: Math.max(35, width + dx),
-      height: Math.max(35, height + dy)
-    });
+    this.props.onResize(ev, size);
   }
 
 }
