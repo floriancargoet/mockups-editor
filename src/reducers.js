@@ -11,15 +11,6 @@ import {
   Z_MOVE_SELECTION, DUPLICATE_SELECTION
 } from './actions';
 
-const defaultComponent = { // TODO: move to action creator?
-  x: 0, y: 0,
-  width: 100, height: 100,
-  properties: {
-    text: '',
-    backgroundColor: '#ccc'
-  }
-};
-
 function cascadeUpdateChildren(item, cb) {
   return update(item, {
     children: {
@@ -150,15 +141,13 @@ function fullState(state = {}, action) {
         console.warn('Do not ADD_COMPONENT a group, use GROUP_SELECTION.');
         return state;
       }
+
       return update(state, {
         last: {
           $set: action.component.id
         },
         components: {
-          $push: [{
-            ...defaultComponent,
-            ...action.component
-          }]
+          $push: [action.component]
         }
       });
     }

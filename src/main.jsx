@@ -14,6 +14,7 @@ import rootReducer from './reducers';
 // UI Root
 import Editor from './containers/Editor';
 
+import * as components from './mockup-components/all';
 
 const logger = createLogger({ collapsed: true });
 
@@ -22,8 +23,7 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-store.dispatch(addComponent({
-  type: 'Box',
+store.dispatch(addComponent(components.Box.create({
   width: 100,
   height: 100,
   x: 50,
@@ -32,22 +32,19 @@ store.dispatch(addComponent({
     text: 'b1',
     backgroundColor: 'pink'
   }
-}));
+})));
 
-store.dispatch(addComponent({
-  type: 'Box',
+store.dispatch(addComponent(components.Box.create({
   width: 150,
   height: 100,
   x: 90,
   y: 60,
   properties: {
-    text: 'b2',
-    backgroundColor: '#bada55'
+    text: 'b2'
   }
-}));
+})));
 
-store.dispatch(addComponent({
-  type: 'Title',
+store.dispatch(addComponent(components.Title.create({
   width: 150,
   height: 50,
   x: 190,
@@ -55,22 +52,19 @@ store.dispatch(addComponent({
   properties: {
     text: 'Hello mockup'
   }
-}));
+})));
 
-store.dispatch(addComponent({
-  type: 'Box',
+store.dispatch(addComponent(components.Box.create({
   width: 80,
   height: 120,
   x: 350,
   y: 350,
   properties: {
-    text: '',
     backgroundColor: 'lime'
   }
-}));
+})));
 
-store.dispatch(addComponent({
-  type: 'Title',
+store.dispatch(addComponent(components.Title.create({
   width: 80,
   height: 120,
   x: 350,
@@ -78,7 +72,7 @@ store.dispatch(addComponent({
   properties: {
     text: 'lime'
   }
-}));
+})));
 
 
 const rootComponent = (

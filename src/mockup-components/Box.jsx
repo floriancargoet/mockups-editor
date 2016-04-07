@@ -1,4 +1,5 @@
 import React from 'react';
+import random from 'random-number-in-range';
 
 const Box = ({ width, height, properties }) => (
   <svg height={height} width={width}>
@@ -7,7 +8,7 @@ const Box = ({ width, height, properties }) => (
       style={{ fill: properties.backgroundColor }}
     >
     </rect>
-    <text x="10" y="30">{properties.text}</text>
+    <text x="10" y="30" fontSize={properties.fontSize}>{properties.text}</text>
   </svg>
 );
 
@@ -16,5 +17,21 @@ Box.propTypes = {
   height: React.PropTypes.number.isRequired,
   properties: React.PropTypes.object
 };
+
+Box.create = (config = {}) => ({
+  type: 'Box',
+  x: random(50, 500),
+  y: random(50, 500),
+  width: random(50, 200),
+  height: random(50, 200),
+  ...config,
+
+  properties: {
+    text: '',
+    backgroundColor: '#bada55',
+    fontSize: 16,
+    ...config.properties
+  }
+});
 
 export default Box;

@@ -5,9 +5,9 @@ import {
   groupSelection, ungroupSelection, zMoveSelection,
   duplicateSelection
 } from '../actions';
-import random from 'random-number-in-range';
 
 import Toolbar from '../components/Toolbar.jsx';
+import * as components from '../mockup-components/all';
 
 const mapStateToProps = (state) => {
   const selectedComponents = state.present.components.filter(c => state.present.selection.includes(c.id));
@@ -31,25 +31,12 @@ const mapDispatchToProps = (dispatch) => {
           break;
 
         case 'createBox':
-          dispatch(addComponent({
-            type: 'Box',
-            x: random(50, 500),
-            y: random(50, 500),
-            width: random(50, 200),
-            height: random(50, 200)
-          }));
+          dispatch(addComponent(components.Box.create()));
           dispatch(selectLastComponent());
           break;
 
         case 'createButton':
-          dispatch(addComponent({
-            type: 'Button',
-            text: 'click me',
-            x: random(50, 500),
-            y: random(50, 500),
-            width: random(50, 200),
-            height: random(50, 200)
-          }));
+          dispatch(addComponent(components.Button.create()));
           dispatch(selectLastComponent());
           break;
 
