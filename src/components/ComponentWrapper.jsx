@@ -18,7 +18,7 @@ function getStyles(props) {
 
   return {
     cursor: 'move',
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0 : 1
   };
 }
 
@@ -68,6 +68,7 @@ class ComponentWrapper extends Component {
       config,
       selected,
       zoomFactor,
+      isDragging,
       ...otherProps
     } = this.props;
     const { x, y, width, height, resizing } = this.state;
@@ -93,7 +94,7 @@ class ComponentWrapper extends Component {
       <Resizable
         x={x} y={y}
         width={width} height={height}
-        enabled={selected}
+        enabled={selected && !isDragging}
         zoomFactor={zoomFactor} // to keep an un-zoomed appearence
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}

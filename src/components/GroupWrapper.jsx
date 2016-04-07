@@ -16,7 +16,7 @@ function getStyles(props) {
 
   return {
     cursor: 'move',
-    opacity: isDragging ? 0.5 : 1
+    opacity: isDragging ? 0 : 1
   };
 }
 
@@ -82,13 +82,13 @@ class GroupWrapper extends Component {
           width={c.width} height={c.height}
         >
           <MockupComponent {...c} />
-          {this.renderSelectionBorder(this.props.selected)}
+          {this.renderBorder(this.props.selected)}
         </svg>
       );
     });
   }
 
-  renderSelectionBorder(selected) {
+  renderBorder(selected) {
     if (!selected) {
       return null;
     }
