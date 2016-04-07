@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { DragDropContext } from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
-import CustomDragLayer from './CustomDragLayer.jsx';
+import CustomDragLayer from './dnd/CustomDragLayer.jsx';
 import Zoomable from './Zoomable.jsx';
 
 import ComponentsContainer from '../containers/ComponentsContainer';
