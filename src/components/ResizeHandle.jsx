@@ -15,7 +15,7 @@ class ResizeHandle extends React.Component {
         onDrag={this.onResize}
         onStop={this.onResizeStop}
       >
-        <rect className="mockup-component-wrapper-resize-handle"
+        <rect className={"mockup-component-resize-handle mockup-component-resize-handle-" + this.props.position}
           x={this.props.x} y={this.props.y}
           width={size} height={size}
         />

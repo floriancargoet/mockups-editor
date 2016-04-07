@@ -43,17 +43,19 @@ body {
 
 .editor {
   height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .property-editor {
   overflow: auto;
 }
 
-.mockup-component-wrapper .mockup-component-wrapper-resize-handle {
+.mockup-component-wrapper .mockup-component-resize-handle {
   visibility: hidden;
 }
-.mockup-component-wrapper_resizing .mockup-component-wrapper-resize-handle,
-.mockup-component-wrapper_selected .mockup-component-wrapper-resize-handle {
+.mockup-component-wrapper_resizing .mockup-component-resize-handle,
+.mockup-component-wrapper_selected .mockup-component-resize-handle {
   visibility: visible;
 }
 
@@ -71,6 +73,15 @@ body {
   stroke-dasharray: 10, 5;
 }
 
-.mockup-component-wrapper-resize-handle {
+.mockup-component-resize-handle-se {
   cursor: se-resize;
+}
+.mockup-component-resize-handle-ne {
+  cursor: ne-resize;
+}
+.mockup-component-resize-handle-sw {
+  cursor: sw-resize;
+}
+.mockup-component-resize-handle-nw {
+  cursor: nw-resize;
 }
