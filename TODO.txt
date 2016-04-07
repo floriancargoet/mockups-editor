@@ -1,0 +1,16 @@
+ - selection dnd
+ - more components
+ - enter group
+ - property editor
+ - 8 resize handles
+ - transformations?
+ - in place text editor
+ - non-box components (arrows)
+ - duplicate
+ - cut/copy/paste
+ - alignment
+ - lock/unlock
+ - fixed point zoom
+ - "infinite" canvas
+ - transform to other component
+ - skins
