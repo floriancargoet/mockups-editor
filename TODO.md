@@ -1,7 +1,13 @@
 ## Must have
  - selection dnd
- - more components
  - property editor
+ - more components
+   - on/off, icon button, multiline button
+   - checkbox, checkbox group, radio, radio group, select, datepicker, numberfield, textarea, input, fieldset
+   - label, line, paragraph, list, link, breadcrumbs
+   - image, shapes, scrollbars, hr, vr, splitters, sliders, progress
+   - tabs, window, accordion
+   - data grid, menu, searchbox, tooltip
 
 ## Should have
  - enter group
@@ -9,6 +15,8 @@
  - cut/copy/paste
  - alignment
  - skins
+ - grid
+ - group as component
 
 ## Could have
  - 8 resize handles
@@ -20,3 +28,6 @@
 
 ## Won't have (for now)
  - …
+
+## Technical tasks
+ - dedicated interactions layer (dnd, resize, ...)
