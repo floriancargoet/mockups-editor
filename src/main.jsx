@@ -64,13 +64,13 @@ store.dispatch(addComponent(components.Button.create({
   }
 })));
 
-store.dispatch(addComponent(components.Title.create({
-  width: 80,
-  height: 120,
-  x: 350,
-  y: 350,
+store.dispatch(addComponent(components.ButtonBar.create({
+  width: 300,
+  height: 50,
+  x: 150,
+  y: 450,
   properties: {
-    text: 'lime'
+    text: 'Button 1, Press me, Hello world'
   }
 })));
 
