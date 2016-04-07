@@ -5,8 +5,10 @@ import { DragDropContext } from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
 import CustomDragLayer from './CustomDragLayer.jsx';
+import Zoomable from './Zoomable.jsx';
 
 import ComponentsContainer from '../containers/ComponentsContainer';
+
 
 class Workspace extends React.Component {
 
@@ -14,20 +16,27 @@ class Workspace extends React.Component {
     super(props);
     this.state = {
       width: 0,
-      height: 0
+      height: 0,
+      zoomFactor: 1
     };
   }
 
   render() {
+    const { width, height, zoomFactor } = this.state;
     return (
-      <svg
-        height="100%"
-        width="100%"
-      >
-        <ComponentsContainer width={this.state.width} height={this.state.height} />
-        <CustomDragLayer />
+      <svg height="100%" width="100%">
+        <Zoomable speed={0.2} handle=".background" onZoom={this.onZoom}>
+          <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
+          <CustomDragLayer  zoomFactor={zoomFactor} />
+        </Zoomable>
       </svg>
     );
+  }
+
+  onZoom = ({ zoomFactor }) => {
+    this.setState({
+      zoomFactor: zoomFactor
+    });
   }
 
   componentDidMount() {
@@ -38,6 +47,7 @@ class Workspace extends React.Component {
       height: el.clientHeight
     });
   }
+
 }
 
 

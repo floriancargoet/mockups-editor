@@ -25,7 +25,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(moveComponent(id, x, y));
       dispatch(selectOneComponent(id));
     },
-    onComponentClicked: (id, ev) => {
+    onComponentMouseDown: (id, ev) => {
       if (ev.ctrlKey) {
         dispatch(selectComponent(id));
       }
@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch) => {
         dispatch(selectOneComponent(id));
       }
     },
-    onComponentsContainerClicked: () => {
+    onBackgroundClicked: () => {
       dispatch(clearSelection());
     }
   };

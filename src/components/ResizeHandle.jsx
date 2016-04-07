@@ -4,11 +4,11 @@ import { DraggableCore } from 'react-draggable';
 class ResizeHandle extends React.Component {
 
   static defaultProps = {
-    handleSize: 10
+    size: 10
   };
 
   render() {
-    const { handleSize } = this.props;
+    const { size } = this.props;
     return (
       <DraggableCore
         onStart={this.onResizeStart}
@@ -17,7 +17,7 @@ class ResizeHandle extends React.Component {
       >
         <rect className="mockup-component-wrapper-resize-handle"
           x={this.props.x} y={this.props.y}
-          width={handleSize} height={handleSize}
+          width={size} height={size}
         />
       </DraggableCore>
     );
@@ -38,7 +38,7 @@ class ResizeHandle extends React.Component {
 }
 
 ResizeHandle.propTypes = {
-  handleSize: React.PropTypes.number,
+  size: React.PropTypes.number,
   x: React.PropTypes.number,
   y: React.PropTypes.number,
   position: React.PropTypes.string,

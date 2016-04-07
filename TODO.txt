@@ -10,7 +10,6 @@
  - cut/copy/paste
  - alignment
  - lock/unlock
- - fixed point zoom
  - "infinite" canvas
  - transform to other component
  - skins

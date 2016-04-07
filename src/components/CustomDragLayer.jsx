@@ -11,7 +11,8 @@ class CustomDragLayer extends Component {
       x: PropTypes.number.isRequired,
       y: PropTypes.number.isRequired
     }),
-    isDragging: PropTypes.bool.isRequired
+    isDragging: PropTypes.bool.isRequired,
+    zoomFactor: PropTypes.number.isRequired
   };
 
   renderItem(type, item) {
@@ -30,13 +31,13 @@ class CustomDragLayer extends Component {
   }
 
   render() {
-    const { item, itemType, isDragging, offset } = this.props;
+    const { item, itemType, isDragging, offset, zoomFactor } = this.props;
 
     if (!isDragging || !offset) {
       return null;
     }
-    const x = offset.x + item.config.x;
-    const y = offset.y + item.config.y;
+    const x = offset.x / zoomFactor + item.config.x;
+    const y = offset.y / zoomFactor + item.config.y;
     const transform = `translate(${x}, ${y})`;
     return (
       <g transform={transform}>

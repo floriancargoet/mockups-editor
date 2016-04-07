@@ -1,33 +1,23 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ComponentWrapper from './ComponentWrapper.jsx';
 import GroupWrapper from './GroupWrapper.jsx';
 import { DropTarget } from 'react-dnd';
 
 
-const boxTarget = {
-  drop(props, monitor, component) {
-    const item = monitor.getItem();
-    const delta = monitor.getDifferenceFromInitialOffset();
-    const left = Math.round(item.left + delta.x);
-    const top = Math.round(item.top + delta.y);
-
-    props.onComponentMoved(item.id, left, top);
-  }
-};
-
-class ComponentsContainer extends React.Component {
+class ComponentsContainer extends Component {
 
   static propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    zoomFactor: PropTypes.number.isRequired,
 
-    connectDropTarget: React.PropTypes.func.isRequired,
-    components: React.PropTypes.array.isRequired,
-    selection: React.PropTypes.array.isRequired,
-    onComponentsContainerClicked: React.PropTypes.func.isRequired,
-    onComponentResized: React.PropTypes.func.isRequired,
-    onComponentMoved: React.PropTypes.func.isRequired,
-    onComponentClicked: React.PropTypes.func.isRequired
+    connectDropTarget: PropTypes.func.isRequired,
+    components: PropTypes.array.isRequired,
+    selection: PropTypes.array.isRequired,
+    onBackgroundClicked: PropTypes.func.isRequired,
+    onComponentResized: PropTypes.func.isRequired,
+    onComponentMoved: PropTypes.func.isRequired,
+    onComponentMouseDown: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -40,9 +30,8 @@ class ComponentsContainer extends React.Component {
   }
 
   render() {
-    const { connectDropTarget, onComponentsContainerClicked } = this.props;
-    return connectDropTarget(
-      <svg onClick={onComponentsContainerClicked}>
+    return this.props.connectDropTarget(
+      <svg>
         { this.renderBackground() }
         { this.renderComponents(this.props.components) }
       </svg>
@@ -53,6 +42,8 @@ class ComponentsContainer extends React.Component {
     // the background forces the outer svg to fill the root
     return (
       <rect
+        className="background"
+        onClick={this.props.onBackgroundClicked}
         x={0} y={0}
         width="100%" height="100%"
         fill="#eee"
@@ -68,14 +59,16 @@ class ComponentsContainer extends React.Component {
         id: id,
         config: c,
         selected: this.props.selection.includes(id),
-        onClick: (ev) => {
-          ev.stopPropagation();
-          this.props.onComponentClicked(id, ev);
+        onMouseDown: (ev) => {
+          this.props.onComponentMouseDown(id, ev);
         }
       };
       return c.type === '__Group__'
         ? <GroupWrapper {...props} />
-        : <ComponentWrapper {...props} onResize={(ev, size) => this.onResize(id, size)} />;
+        : <ComponentWrapper {...props}
+            onResize={(ev, size) => this.onResize(id, size)}
+            zoomFactor={this.props.zoomFactor}
+          />;
     });
   }
 
@@ -83,6 +76,18 @@ class ComponentsContainer extends React.Component {
     this.props.onComponentResized(id, size);
   }
 }
+
+
+const boxTarget = {
+  drop(props, monitor, component) {
+    const item = monitor.getItem();
+    const delta = monitor.getDifferenceFromInitialOffset();
+    const left = Math.round(item.left + delta.x / props.zoomFactor);
+    const top = Math.round(item.top + delta.y / props.zoomFactor);
+
+    props.onComponentMoved(item.id, left, top);
+  }
+};
 
 const DropTargetDecorator = DropTarget(['mockup-component', 'mockup-group'], boxTarget, connect => ({
   // injected props

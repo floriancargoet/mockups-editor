@@ -78,7 +78,8 @@ class ComponentWrapper extends Component {
     id: PropTypes.any.isRequired,
     config: PropTypes.object.isRequired,
     selected: PropTypes.bool.isRequired,
-    onResize: PropTypes.func.isRequired
+    onResize: PropTypes.func.isRequired,
+    zoomFactor: PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -126,15 +127,16 @@ class ComponentWrapper extends Component {
       'mockup-component-wrapper_resizing': resizing,
       'mockup-component-wrapper_selected': selected
     });
+    const margin = 10 / this.props.zoomFactor;
     return (
       <g className={classNames}
         {...otherProps}
-        transform={`translate(${x - 10} ${y - 10})`}
-        width={width + 20} height={height + 20}
+        transform={`translate(${x - margin} ${y - margin})`}
+        width={width + 2 * margin} height={height + 2 * margin}
         style={getStyles(this.props)}
       >
         {connectDragSource(
-          <g transform="translate(10 10)">
+          <g transform={`translate(${margin} ${margin})`}>
             {this.renderBackground()}
             {component}
           </g>
@@ -159,37 +161,41 @@ class ComponentWrapper extends Component {
     const { width, height } = this.state;
     return (
       <rect className="mockup-component-wrapper-border"
-        x="9" y="9" width={width + 2} height={height + 2} fill="none"
+        style={{
+          strokeWidth: this.props.selected ? 2 / this.props.zoomFactor : 0
+        }}
+        x={10 / this.props.zoomFactor} y={10 / this.props.zoomFactor} width={width} height={height} fill="none"
       />
     );
   }
 
   renderResizers() {
+    const size = 10 / this.props.zoomFactor;
     return [
       <ResizeHandle
-        key="se" position="se"
-        x={this.state.width + 10} y={this.state.height + 10}
+        key="se" position="se" size={size}
+        x={this.state.width + size} y={this.state.height + size}
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
       />,
       <ResizeHandle
-        key="nw" position="nw"
+        key="nw" position="nw" size={size}
         x={0} y={0}
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
       />,
       <ResizeHandle
-        key="ne" position="ne"
-        x={this.state.width + 10} y={0}
+        key="ne" position="ne" size={size}
+        x={this.state.width + size} y={0}
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
       />,
       <ResizeHandle
-        key="sw" position="sw"
-        x={0} y={this.state.height + 10}
+        key="sw" position="sw" size={size}
+        x={0} y={this.state.height + size}
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
@@ -206,8 +212,8 @@ class ComponentWrapper extends Component {
   }
 
   onResize = (handle, ev, { position }) => {
-    const dx = position.clientX - this.startX;
-    const dy = position.clientY - this.startY;
+    const dx = (position.clientX - this.startX) / this.props.zoomFactor;
+    const dy = (position.clientY - this.startY) / this.props.zoomFactor;
     const delta = getDelta(handle, dx, dy);
     const size = applyDelta(delta, this.props.config);
 
@@ -219,8 +225,8 @@ class ComponentWrapper extends Component {
       resizing: false
     });
 
-    const dx = position.clientX - this.startX;
-    const dy = position.clientY - this.startY;
+    const dx = (position.clientX - this.startX) / this.props.zoomFactor;
+    const dy = (position.clientY - this.startY) / this.props.zoomFactor;
     const delta = getDelta(handle, dx, dy);
     const size = applyDelta(delta, this.props.config);
 
