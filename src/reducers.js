@@ -67,13 +67,19 @@ function components(state = [], action) {
     case MOVE_COMPONENT: {
       if (state[index].type === '__Group__') {
         // update children instead of group
-        return state.map(item => cascadeUpdateChildren(item, c => {
-          return c.type === '__Group__' ? c : {
-            ...c,
-            x: c.x + action.x,
-            y: c.y + action.y
-          };
-        }));
+        return update(state, {
+          [index]: {
+            $apply: function (group) {
+              return cascadeUpdateChildren(group, c => {
+                return c.type === '__Group__' ? c : {
+                  ...c,
+                  x: c.x + action.x,
+                  y: c.y + action.y
+                };
+              });
+            }
+          }
+        });
       }
       return update(state, {
         [index]: {
