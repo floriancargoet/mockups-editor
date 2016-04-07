@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { ActionCreators as UndoActions } from 'redux-undo';
 import {
   addComponent, selectLastComponent, deleteSelection,
-  groupSelection, ungroupSelection, zMoveSelection
+  groupSelection, ungroupSelection, zMoveSelection,
+  duplicateSelection
 } from '../actions';
 import random from 'random-number-in-range';
 
@@ -54,6 +55,10 @@ const mapDispatchToProps = (dispatch) => {
 
         case 'delete':
           dispatch(deleteSelection());
+          break;
+
+        case 'duplicate':
+          dispatch(duplicateSelection());
           break;
 
         case 'group':

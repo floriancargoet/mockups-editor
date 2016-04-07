@@ -2,12 +2,13 @@ import update from 'react/lib/update';
 import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as utils from './reducers-utils';
+import getID from './util/id';
 
 import {
   MOVE_COMPONENT, RESIZE_COMPONENT, ADD_COMPONENT, UPDATE_COMPONENT_PROPERTY,
   SELECT_COMPONENT, SELECT_ONE_COMPONENT, SELECT_LAST_COMPONENT,
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
-  Z_MOVE_SELECTION
+  Z_MOVE_SELECTION, DUPLICATE_SELECTION
 } from './actions';
 
 const defaultComponent = { // TODO: move to action creator?
@@ -36,6 +37,21 @@ function cascadeUpdateChildren(item, cb) {
     }
   });
 }
+
+function cascadeUpdate(item, cb) {
+  return update(item, {
+    $apply: cb,
+    children: {
+      $apply: function (children) {
+        if (!children) {
+          return children;
+        }
+        return children.map(c => cascadeUpdate(c, cb));
+      }
+    }
+  });
+}
+
 /*
 {
   components: [component...],
@@ -152,6 +168,39 @@ function fullState(state = {}, action) {
         },
         selection: {
           $set: []
+        }
+      });
+    }
+
+    case DUPLICATE_SELECTION: {
+      const selection = [];
+      const components = [];
+      state.components.forEach(component => {
+        components.push(component);
+        if (state.selection.includes(component.id)) {
+          let clone = JSON.parse(JSON.stringify(component));
+          // update ids, including inside groups
+          clone = cascadeUpdate(clone, c => {
+            const newC = {
+              ...c,
+              id: getID()
+            };
+            if (c.type !== '__Group__') {
+              newC.x = c.x + 30;
+              newC.y = c.y + 30;
+            }
+            return newC;
+          });
+          components.push(clone);
+          selection.push(clone.id);
+        }
+      });
+      return update(state, {
+        components: {
+          $set: components
+        },
+        selection: {
+          $set: selection
         }
       });
     }

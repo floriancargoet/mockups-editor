@@ -9,6 +9,7 @@ const Toolbar = ({ onButtonClicked, selection, selectionContainsGroup }) => {
       <Button onClick={() => onButtonClicked('redo')}>Redo</Button>
       <Button onClick={() => onButtonClicked('createBox')}>Box</Button>
       <Button onClick={() => onButtonClicked('createButton')}>Button</Button>
+      <Button onClick={() => onButtonClicked('duplicate')}>Duplicate</Button>
       <Button onClick={() => onButtonClicked('delete')} disabled={(selection.length === 0)}>Delete</Button>
       <Button onClick={() => onButtonClicked('group')} disabled={selection.length < 2}>Group</Button>
       <Button onClick={() => onButtonClicked('ungroup')} disabled={!selectionContainsGroup}>Ungroup</Button>

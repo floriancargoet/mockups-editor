@@ -14,6 +14,7 @@ export const DELETE_SELECTION = 'DELETE_SELECTION';
 export const GROUP_SELECTION = 'GROUP_SELECTION';
 export const UNGROUP_SELECTION = 'UNGROUP_SELECTION';
 export const Z_MOVE_SELECTION = 'Z_MOVE_SELECTION';
+export const DUPLICATE_SELECTION = 'DUPLICATE_SELECTION';
 
 export function moveComponent(id, x, y) {
   return { type: MOVE_COMPONENT, id, x, y };
@@ -65,4 +66,8 @@ export function zMoveSelection(where) {
 
 export function updateComponentProperty(id, property, value) {
   return { type: UPDATE_COMPONENT_PROPERTY, id, property, value };
+}
+
+export function duplicateSelection() {
+  return { type: DUPLICATE_SELECTION };
 }

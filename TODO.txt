@@ -6,7 +6,6 @@
  - transformations?
  - in place text editor
  - non-box components (arrows)
- - duplicate
  - cut/copy/paste
  - alignment
  - lock/unlock
