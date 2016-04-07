@@ -3,8 +3,8 @@ import random from 'random-number-in-range';
 
 const Button = ({ width, height, properties }) => (
   <svg height={height} width={width}>
-    <rect x="0" y="0"
-      height={height} width={width}
+    <rect x="3" y="3" height={height - 3} width={width - 3} style={{ fill: '#000' }} />
+    <rect x="0" y="0" height={height - 3} width={width - 3}
       style={{
         fill: properties.backgroundColor,
         stroke: '#000'

@@ -54,9 +54,9 @@ store.dispatch(addComponent(components.Title.create({
   }
 })));
 
-store.dispatch(addComponent(components.Box.create({
+store.dispatch(addComponent(components.Button.create({
   width: 80,
-  height: 120,
+  height: 40,
   x: 350,
   y: 350,
   properties: {
