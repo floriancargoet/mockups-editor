@@ -74,6 +74,10 @@ store.dispatch(addComponent(components.ButtonBar.create({
   }
 })));
 
+store.dispatch(addComponent(components.Path.create({
+  x: 150,
+  y: 450
+})));
 
 const rootComponent = (
   <Provider store={store}>
