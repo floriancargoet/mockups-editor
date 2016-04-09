@@ -33,7 +33,7 @@ store.dispatch(addComponent(components.Box.create({
     backgroundColor: 'pink'
   }
 })));
-
+/*
 store.dispatch(addComponent(components.Box.create({
   width: 150,
   height: 100,
@@ -77,6 +77,16 @@ store.dispatch(addComponent(components.ButtonBar.create({
 store.dispatch(addComponent(components.Path.create({
   x: 150,
   y: 450
+})));
+*/
+store.dispatch(addComponent(components.Tooltip.create({
+  x: 100,
+  y: 100,
+  width: 200,
+  height: 200,
+  properties: {
+    text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum. lorem ipsum lorem ipsum lorem ipsum lorem ipsum !'
+  }
 })));
 
 const rootComponent = (

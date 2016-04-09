@@ -7,7 +7,7 @@
    - label, line, paragraph, list, link, breadcrumbs
    - image, shapes, scrollbars, hr, vr, splitters, sliders, progress
    - tabs, window, accordion
-   - data grid, menu, searchbox, tooltip
+   - data grid, menu, searchbox
 
 ## Should have
  - enter group
