@@ -18,6 +18,12 @@ Box.propTypes = {
   properties: React.PropTypes.object
 };
 
+Box.editors = {
+  text: 'String',
+  backgroundColor: 'Color',
+  fontSize: 'Number'
+};
+
 Box.create = (config = {}) => ({
   type: 'Box',
   x: random(50, 500),

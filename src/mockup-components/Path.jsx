@@ -48,6 +48,13 @@ Path.propTypes = {
   properties: PropTypes.object
 };
 
+
+Path.editors = {
+  stroke: 'Color',
+  strokeWidth: 'Number',
+  strokeDasharray: 'String'
+};
+
 Path.create = (config = {}) => ({
   type: 'Path',
   x: random(50, 500),

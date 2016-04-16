@@ -50,6 +50,13 @@ class ButtonBar extends Component {
   }
 }
 
+
+ButtonBar.editors = {
+  text: 'String',
+  backgroundColor: 'Color',
+  fontSize: 'Number'
+};
+
 ButtonBar.create = (config = {}) => ({
   type: 'ButtonBar',
   x: random(50, 500),

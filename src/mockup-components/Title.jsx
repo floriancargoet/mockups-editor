@@ -13,6 +13,11 @@ Title.propTypes = {
   properties: React.PropTypes.object
 };
 
+Title.editors = {
+  text: 'String',
+  fontSize: 'Number'
+};
+
 Title.create = (config = {}) => ({
   type: 'Title',
   x: random(50, 500),

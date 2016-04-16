@@ -20,6 +20,12 @@ Button.propTypes = {
   properties: React.PropTypes.object
 };
 
+Button.editors = {
+  text: 'String',
+  backgroundColor: 'Color',
+  fontSize: 'Number'
+};
+
 Button.create = (config = {}) => ({
   type: 'Button',
   x: random(50, 500),

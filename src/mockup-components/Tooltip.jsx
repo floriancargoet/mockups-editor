@@ -61,6 +61,12 @@ Tooltip.propTypes = {
   properties: PropTypes.object
 };
 
+Tooltip.editors = {
+  text: 'String',
+  backgroundColor: 'Color',
+  fontSize: 'Number'
+};
+
 Tooltip.create = (config = {}) => ({
   type: 'Tooltip',
   x: random(50, 500),
