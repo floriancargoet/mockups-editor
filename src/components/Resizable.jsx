@@ -35,6 +35,38 @@ function getDelta(direction, dx, dy) {
       height: dy
     };
   }
+  else if (direction === 'n') {
+    return {
+      x: 0,
+      y: dy,
+      width: 0,
+      height: -dy
+    };
+  }
+  else if (direction === 'e') {
+    return {
+      x: 0,
+      y: 0,
+      width: dx,
+      height: 0
+    };
+  }
+  else if (direction === 's') {
+    return {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: dy
+    };
+  }
+  else if (direction === 'w') {
+    return {
+      x: dx,
+      y: 0,
+      width: -dx,
+      height: 0
+    };
+  }
 }
 const MIN_SIZE = 10;
 
@@ -96,36 +128,24 @@ export default class Resizable extends Component {
   renderResizers() {
     const { width, height, zoomFactor } = this.props;
     const size = 10 / zoomFactor;
+    const commonProps = {
+      size: size,
+      onResizeStart: this.onResizeStart,
+      onResize: this.onResize,
+      onResizeStop: this.onResizeStop
+    };
     return [
-      <ResizeHandle
-        key="se" position="se" size={size}
-        x={width + size} y={height + size}
-        onResizeStart={this.onResizeStart}
-        onResize={this.onResize}
-        onResizeStop={this.onResizeStop}
-      />,
-      <ResizeHandle
-        key="nw" position="nw" size={size}
-        x={0} y={0}
-        onResizeStart={this.onResizeStart}
-        onResize={this.onResize}
-        onResizeStop={this.onResizeStop}
-      />,
-      <ResizeHandle
-        key="ne" position="ne" size={size}
-        x={width + size} y={0}
-        onResizeStart={this.onResizeStart}
-        onResize={this.onResize}
-        onResizeStop={this.onResizeStop}
-      />,
-      <ResizeHandle
-        key="sw" position="sw" size={size}
-        x={0} y={height + size}
-        onResizeStart={this.onResizeStart}
-        onResize={this.onResize}
-        onResizeStop={this.onResizeStop}
-      />
-    ];
+      ['se', width + size, height + size],
+      ['nw', 0, 0],
+      ['ne', width + size, 0],
+      ['sw', 0, height + size],
+      ['n', (width + size) / 2, 0],
+      ['e', width + size, (height + size) / 2],
+      ['s', (width + size) / 2, height + size],
+      ['w', 0, (height + size) / 2]
+    ].map(([position, x, y]) =>
+      <ResizeHandle {...{ ...commonProps, x, y, position }} key={position} />
+    );
   }
 
   onResizeStart = (handle, ev, { position }) => {

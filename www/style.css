@@ -85,3 +85,15 @@ body {
 .mockup-component-resize-handle-nw {
   cursor: nw-resize;
 }
+.mockup-component-resize-handle-s {
+  cursor: s-resize;
+}
+.mockup-component-resize-handle-n {
+  cursor: n-resize;
+}
+.mockup-component-resize-handle-e {
+  cursor: e-resize;
+}
+.mockup-component-resize-handle-w {
+  cursor: w-resize;
+}

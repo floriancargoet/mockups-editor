@@ -19,7 +19,6 @@
  - group as component
 
 ## Could have
- - 8 resize handles
  - transformations?
  - in place text editor
  - lock/unlock
