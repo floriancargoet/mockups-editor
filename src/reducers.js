@@ -6,6 +6,7 @@ import getID from './util/id';
 
 import {
   MOVE_COMPONENT, RESIZE_COMPONENT, ADD_COMPONENT, UPDATE_COMPONENT_PROPERTY,
+  UPDATE_COMPONENT_ROOT_PROPERTY,
   SELECT_COMPONENT, SELECT_ONE_COMPONENT, SELECT_LAST_COMPONENT,
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
   Z_MOVE_SELECTION, DUPLICATE_SELECTION
@@ -100,6 +101,16 @@ function components(state = [], action) {
             $merge: {
               [action.property]: action.value
             }
+          }
+        }
+      });
+    }
+
+    case UPDATE_COMPONENT_ROOT_PROPERTY: {
+      return update(state, {
+        [index]: {
+          $merge: {
+            [action.property]: action.value
           }
         }
       });

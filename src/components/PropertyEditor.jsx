@@ -3,16 +3,20 @@ import React from 'react';
 import PropertyField from './PropertyField.jsx';
 
 
-const PropertyEditor = ({ component, onPropertyChange }) => {
+const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) => {
   if (!component) {
     return (<div className="property-editor"></div>);
   }
   return (
     <div className="property-editor">
-      <PropertyField label="X" value={component.x} readOnly/>
-      <PropertyField label="Y" value={component.y} readOnly/>
-      <PropertyField label="Width" value={component.width} readOnly/>
-      <PropertyField label="Height" value={component.height} readOnly/>
+      {
+        ['x', 'y', 'width', 'height'].map(prop => (
+          <PropertyField
+            key={prop} label={prop} value={component[prop]}
+            onChange={ev => onRootPropertyChange(component, prop, Number(ev.target.value))}
+          />
+        ))
+      }
       {
         Object.keys(component.properties).map(prop => (
           <PropertyField
@@ -30,7 +34,8 @@ const PropertyEditor = ({ component, onPropertyChange }) => {
 
 PropertyEditor.propTypes = {
   component: React.PropTypes.object,
-  onPropertyChange: React.PropTypes.func
+  onPropertyChange: React.PropTypes.func,
+  onRootPropertyChange: React.PropTypes.func
 };
 
 export default PropertyEditor;

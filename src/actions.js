@@ -5,6 +5,7 @@ export const MOVE_COMPONENT = 'MOVE_COMPONENT';
 export const RESIZE_COMPONENT = 'RESIZE_COMPONENT';
 export const ADD_COMPONENT = 'ADD_COMPONENT';
 export const UPDATE_COMPONENT_PROPERTY = 'UPDATE_COMPONENT_PROPERTY';
+export const UPDATE_COMPONENT_ROOT_PROPERTY = 'UPDATE_COMPONENT_ROOT_PROPERTY';
 
 export const SELECT_COMPONENT = 'SELECT_COMPONENT';
 export const SELECT_ONE_COMPONENT = 'SELECT_ONE_COMPONENT';
@@ -66,6 +67,9 @@ export function zMoveSelection(where) {
 
 export function updateComponentProperty(id, property, value) {
   return { type: UPDATE_COMPONENT_PROPERTY, id, property, value };
+}
+export function updateComponentRootProperty(id, property, value) {
+  return { type: UPDATE_COMPONENT_ROOT_PROPERTY, id, property, value };
 }
 
 export function duplicateSelection() {

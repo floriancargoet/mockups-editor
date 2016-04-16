@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateComponentProperty } from '../actions';
+import { updateComponentProperty, updateComponentRootProperty } from '../actions';
 
 import PropertyEditor from '../components/PropertyEditor.jsx';
 
@@ -13,6 +13,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onRootPropertyChange(component, prop, value) {
+      dispatch(updateComponentRootProperty(component.id, prop, value));
+    },
     onPropertyChange(component, prop, value) {
       dispatch(updateComponentProperty(component.id, prop, value));
     }
