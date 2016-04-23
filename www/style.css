@@ -85,7 +85,10 @@ body {
 .mockup-component-resize-handle-nw {
   cursor: nw-resize;
 }
-.mockup-component-resize-handle-s {
+
+path, rect {
+  filter: url(#pencil);
+}.mockup-component-resize-handle-s {
   cursor: s-resize;
 }
 .mockup-component-resize-handle-n {
