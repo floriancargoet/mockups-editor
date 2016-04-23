@@ -80,6 +80,11 @@ class ComponentWrapper extends Component {
       'mockup-component-wrapper_resizing': resizing,
       'mockup-component-wrapper_selected': selected
     });
+    // early return when the component is locked (no dnd, no resize)
+    if (config.locked) {
+      return component;
+    }
+
     const draggableComponent = connectDragSource(
       <g
         {...otherProps}

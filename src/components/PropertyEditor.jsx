@@ -11,6 +11,14 @@ function getEditorType(component, prop) {
   return 'String';
 }
 
+const rootPropsEditors = {
+  x: 'Number',
+  y: 'Number',
+  width: 'Number',
+  height: 'Number',
+  locked: 'Boolean'
+};
+
 const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) => {
   if (!component) {
     return (<div className="property-editor"></div>);
@@ -18,9 +26,9 @@ const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) =
   return (
     <div className="property-editor">
       {
-        ['x', 'y', 'width', 'height'].map(prop => (
+        Object.keys(rootPropsEditors).map(prop => (
           <PropertyField
-            key={prop} label={prop} value={component[prop]} type="Number"
+            key={prop} label={prop} value={component[prop]} type={rootPropsEditors[prop]}
             onChange={value => onRootPropertyChange(component, prop, value)}
           />
         ))

@@ -61,6 +61,7 @@ Path.create = (config = {}) => ({
   y: random(50, 500),
   width: 205,
   height: 205,
+  locked: false,
   ...config,
 
   properties: {

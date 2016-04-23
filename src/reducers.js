@@ -248,10 +248,12 @@ function fullState(state = {}, action) {
       const group = {
         id: action.groupId,
         type: '__Group__',
+        // TODO group component?
         width: 100,
         height: 100,
         x: 0,
         y: 0,
+        locked: false,
         properties: {},
         children: utils.getSelectedComponents(state)
       };

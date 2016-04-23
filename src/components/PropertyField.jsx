@@ -2,6 +2,8 @@ import React from 'react';
 
 function renderEditor(type, value, onChange) {
   switch (type) {
+    case 'Boolean':
+      return <input type="checkbox" checked={value} onChange={ev => onChange(ev.target.checked)} />;
     case 'Number':
       return <input type="number" value={value} onChange={ev => onChange(Number(ev.target.value))} />;
     case 'String':

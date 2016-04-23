@@ -32,6 +32,7 @@ Button.create = (config = {}) => ({
   y: random(50, 500),
   width: random(50, 200),
   height: random(50, 200),
+  locked: false,
   ...config,
 
   properties: {
