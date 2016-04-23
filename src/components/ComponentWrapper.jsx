@@ -34,6 +34,7 @@ class ComponentWrapper extends Component {
     config: PropTypes.object.isRequired,
     selected: PropTypes.bool.isRequired,
     onResize: PropTypes.func.isRequired,
+    onMouseDown: PropTypes.func.isRequired,
     zoomFactor: PropTypes.number.isRequired
   };
 
@@ -69,25 +70,21 @@ class ComponentWrapper extends Component {
       selected,
       zoomFactor,
       isDragging,
-      ...otherProps
+      onMouseDown
     } = this.props;
     const { x, y, width, height, resizing } = this.state;
 
     const MockupComponent = components[config.type];
-    const component = <MockupComponent {...config} width={width} height={height} />;
+    let component = <MockupComponent {...config} width={width} height={height} />;
     const classNames = classnames({
       'mockup-component-wrapper': true,
       'mockup-component-wrapper_resizing': resizing,
       'mockup-component-wrapper_selected': selected
     });
-    // early return when the component is locked (no dnd, no resize)
-    if (config.locked) {
-      return component;
-    }
 
-    const draggableComponent = connectDragSource(
+    component = (
       <g
-        {...otherProps}
+        onMouseDown={onMouseDown}
         className={classNames}
         style={getStyles(this.props)}
       >
@@ -95,17 +92,23 @@ class ComponentWrapper extends Component {
         {component}
       </g>
     );
+
+    if (!config.locked) {
+      component = connectDragSource(component);
+    }
+
     return (
       <Resizable
         x={x} y={y}
         width={width} height={height}
-        enabled={selected && !isDragging}
+        showBorder={selected && !isDragging}
+        showHandles={selected && !isDragging && !config.locked}
         zoomFactor={zoomFactor} // to keep an un-zoomed appearence
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
       >
-        {draggableComponent}
+        {component}
       </Resizable>
     );
   }

@@ -29,7 +29,8 @@ class GroupWrapper extends Component {
 
     id: PropTypes.any.isRequired,
     config: PropTypes.object.isRequired,
-    selected: PropTypes.bool.isRequired
+    selected: PropTypes.bool.isRequired,
+    onMouseDown: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -52,18 +53,23 @@ class GroupWrapper extends Component {
     const { // list all props to remove from otherProps
       connectDragSource,
       config,
-      selected,
-      ...otherProps
+      onMouseDown
     } = this.props;
 
-    return connectDragSource(
+    let group = (
       <g
-        {...otherProps}
         style={getStyles(this.props)}
+        onMouseDown={onMouseDown}
       >
         {this.renderChildComponents(config.children)}
       </g>
     );
+
+    if (!config.locked) {
+      group = connectDragSource(group);
+    }
+
+    return group;
   }
 
   renderChildComponents(childComponents) {

@@ -87,7 +87,8 @@ export default class Resizable extends Component {
     height: PropTypes.number.isRequired,
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
-    enabled: PropTypes.bool.isRequired,
+    showBorder: PropTypes.bool.isRequired,
+    showHandles: PropTypes.bool.isRequired,
     zoomFactor: PropTypes.number.isRequired
   };
 
@@ -99,7 +100,7 @@ export default class Resizable extends Component {
 
   render() {
     const margin = 10 / this.props.zoomFactor;
-    const { x, y, enabled } = this.props;
+    const { x, y, showBorder, showHandles } = this.props;
     return (
       <g
         transform={`translate(${x - margin} ${y - margin})`}
@@ -107,8 +108,8 @@ export default class Resizable extends Component {
         <g transform={`translate(${margin} ${margin})`}>
           {this.props.children}
         </g>
-        {enabled && this.renderBorder()}
-        {enabled && this.renderResizers()}
+        {showBorder && this.renderBorder()}
+        {showHandles && this.renderResizers()}
       </g>
     );
   }
