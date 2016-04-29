@@ -2,7 +2,7 @@
  - selection dnd
  - property editor (Color, Range, custom)
  - more components
-   - on/off, icon button, multiline button
+   - on/off, icon button
    - checkbox, checkbox group, radio, radio group, select, datepicker, numberfield, textarea, input, fieldset
    - label, line, paragraph, list, link, breadcrumbs
    - image, shapes, scrollbars, hr, vr, splitters, sliders, progress

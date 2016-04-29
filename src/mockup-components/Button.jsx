@@ -1,6 +1,12 @@
 import React from 'react';
 import random from 'random-number-in-range';
 
+const centeredTextStyles = {
+  display: 'table-cell',
+  textAlign: 'center',
+  verticalAlign: 'middle'
+};
+
 const Button = ({ width, height, properties }) => (
   <svg height={height} width={width}>
     <rect x="3" y="3" height={height - 3} width={width - 3} style={{ fill: '#000' }} />
@@ -10,7 +16,13 @@ const Button = ({ width, height, properties }) => (
         stroke: '#000'
       }}
     />
-    <text x="50%" y="50%" textAnchor="middle" fontSize={properties.fontSize}>{properties.text}</text>
+    <foreignObject x={0} y={0} width={width} height={height}>
+      <div style={{ width, height, display: 'table' }}>
+        <div style={{...centeredTextStyles, fontSize: properties.fontSize}}>
+          {properties.text}
+        </div>
+      </div>
+    </foreignObject>
   </svg>
 );
 
