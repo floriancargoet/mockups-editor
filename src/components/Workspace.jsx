@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-dnd';
 // import HTML5Backend from 'react-dnd-html5-backend';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
 import CustomDragLayer from './dnd/CustomDragLayer.jsx';
-import Zoomable from './Zoomable.jsx';
+import PanZoom from './PanZoom.jsx';
 
 import ComponentsContainer from '../containers/ComponentsContainer';
 
@@ -25,10 +25,10 @@ class Workspace extends React.Component {
     const { width, height, zoomFactor } = this.state;
     return (
       <svg height="100%" width="100%">
-        <Zoomable speed={0.2} handle=".background" onZoom={this.onZoom}>
+        <PanZoom zoomSpeed={0.2} panHandle=".background" onZoom={this.onZoom}>
           <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
           <CustomDragLayer  zoomFactor={zoomFactor} />
-        </Zoomable>
+        </PanZoom>
       </svg>
     );
   }

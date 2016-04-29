@@ -49,17 +49,19 @@ function getZoomTransform(el, zoomX, zoomY, zoomFactor) {
   };
 }
 
-export default class Zoomable extends Component {
+export default class PanZoom extends Component {
 
   static propTypes = {
-    speed: PropTypes.number,
+    zoomSpeed: PropTypes.number,
     onZoom: PropTypes.func,
-    handle: PropTypes.string.isRequired,
+    panMin: PropTypes.number,
+    panHandle: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired
   }
 
   static defaultProps = {
-    speed: 0.065
+    zoomSpeed: 0.065,
+    panMin: 0
   }
 
   constructor(props) {
@@ -67,20 +69,28 @@ export default class Zoomable extends Component {
     this.state = {
       zoomTransform: '',
       panX: 0,
-      panY: 0
+      panY: 0,
+      panning: false,
+      startX: 0,
+      startY: 0,
+      oldPanX: 0,
+      oldPanY: 0,
+      minReached: false
     };
   }
 
   render() {
-    const { zoomTransform, panX, panY } = this.state;
+    const { zoomTransform, panX, panY, panning } = this.state;
+    const dragStyles = { cursor: panning ? "move" : "default" };
     return (
       <DraggableCore
+        allowAnyClick // enable all buttons, filter in drag callbacks
         onStart={this.onDragStart}
         onDrag={this.onDrag}
         onStop={this.onDragStop}
-        handle={this.props.handle}
+        handle={this.props.panHandle}
       >
-        <g transform={`translate(${panX}, ${panY})`}>
+        <g transform={`translate(${panX}, ${panY})`} style={dragStyles}>
           <g transform={zoomTransform} onWheel={this.onWheel}>
             {this.props.children}
           </g>
@@ -90,33 +100,64 @@ export default class Zoomable extends Component {
   }
 
   onDragStart = (ev, { position }) => {
-    this.startX = position.clientX;
-    this.startY = position.clientY;
-    this.oldPanX = this.state.panX;
-    this.oldPanY = this.state.panY;
-  }
-
-  onDrag = (ev, { position }) => {
-    const dx = position.clientX - this.startX;
-    const dy = position.clientY - this.startY;
+    if (ev.button !== 1) {
+      ev.preventDefault();
+      return;
+    }
 
     this.setState({
-      panX: this.oldPanX + dx,
-      panY: this.oldPanY + dy
+      startX: position.clientX,
+      startY: position.clientY,
+      oldPanX: this.state.panX,
+      oldPanY: this.state.panY,
+      minReached: false,
+      panning: true
     });
   }
 
+  onDrag = (ev, { position }) => {
+    if (ev.button !== 1) {
+      ev.preventDefault();
+      return;
+    }
+    const dx = position.clientX - this.state.startX;
+    const dy = position.clientY - this.state.startY;
+
+    let minReached = this.state.minReached
+
+    if (!minReached) {
+      minReached = (dx * dx + dy * dy >= this.props.panMin * this.props.panMin);
+    }
+
+    if (minReached) {
+      this.setState({
+        panX: this.state.oldPanX + dx,
+        panY: this.state.oldPanY + dy,
+        minReached: minReached
+      });
+    }
+    else {
+      this.setState({
+        minReached: minReached
+      });
+    }
+  }
+
   onDragStop = (ev, { position }) => {
-    delete this.startX;
-    delete this.startY;
-    delete this.oldPanX;
-    delete this.oldPanY;
+    this.setState({
+      startX: 0,
+      startY: 0,
+      oldPanX: 0,
+      oldPanY: 0,
+      minReached: false,
+      panning: false
+    });
   }
 
   onWheel = (ev) => {
     const zoomX = ev.clientX - this.state.panX;
     const zoomY = ev.clientY - this.state.panY;
-    const zoomFactor = getZoomFactor(ev.deltaY, this.props.speed);
+    const zoomFactor = getZoomFactor(ev.deltaY, this.props.zoomSpeed);
 
     const { scale, transform } = getZoomTransform(ev.currentTarget, zoomX, zoomY, zoomFactor);
     this.setState({
