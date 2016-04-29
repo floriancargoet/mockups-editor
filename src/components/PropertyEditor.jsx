@@ -28,7 +28,9 @@ const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) =
       {
         Object.keys(rootPropsEditors).map(prop => (
           <PropertyField
-            key={prop} label={prop} value={component[prop]} type={rootPropsEditors[prop]}
+            key={prop} id={prop} label={prop}
+            type={rootPropsEditors[prop]}
+            value={component[prop]}
             onChange={value => onRootPropertyChange(component, prop, value)}
           />
         ))
@@ -36,7 +38,9 @@ const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) =
       {
         Object.keys(component.properties).map(prop => (
           <PropertyField
-            key={prop} label={prop} value={component.properties[prop]} type={getEditorType(component, prop)}
+            key={prop} id={prop} label={prop}
+            type={getEditorType(component, prop)}
+            value={component.properties[prop]}
             onChange={value => onPropertyChange(component, prop, value)}
           />
         ))

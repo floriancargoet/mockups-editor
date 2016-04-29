@@ -1,23 +1,23 @@
 import React from 'react';
 
-function renderEditor(type, value, onChange) {
+function renderEditor(id, type, value, onChange) {
   switch (type) {
     case 'Boolean':
-      return <input type="checkbox" checked={value} onChange={ev => onChange(ev.target.checked)} />;
+      return <input id={id} type="checkbox" checked={value} onChange={ev => onChange(ev.target.checked)} />;
     case 'Number':
-      return <input type="number" value={value} onChange={ev => onChange(Number(ev.target.value))} />;
+      return <input id={id} type="number" value={value} onChange={ev => onChange(Number(ev.target.value))} />;
     case 'String':
     default:
-      return <input type="text" value={value} onChange={ev => onChange(String(ev.target.value))}/>;
+      return <input id={id} type="text" value={value} onChange={ev => onChange(String(ev.target.value))}/>;
   }
 }
 
-const PropertyField = ({ label, value, type, readOnly, onChange }) => (
+const PropertyField = ({ id, label, value, type, readOnly, onChange }) => (
   <div className="property-field">
-    <label>{label}: </label>
+    <label htmlFor={id}>{label}: </label>
     { readOnly
       ? <span>{value}</span>
-      : renderEditor(type, value, onChange)
+      : renderEditor(id, type, value, onChange)
     }
   </div>
 );
