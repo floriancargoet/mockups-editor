@@ -17,7 +17,7 @@ export default class Editor extends React.Component {
               <Flex style={{ height: '100%', overflow: 'hidden' /* fix SVG quirk */ }}>
                 <Workspace />
               </Flex>
-              <Fixed style={{ width: 250 }}>
+              <Fixed style={{ width: 350 }}>
                 <Debugger />
                 <PropertyEditor />
               </Fixed>

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as editors from './property-editors';
 
 function renderEditor(id, type, value, onChange) {
   switch (type) {
@@ -7,8 +8,11 @@ function renderEditor(id, type, value, onChange) {
     case 'Number':
       return <input id={id} type="number" value={value} onChange={ev => onChange(Number(ev.target.value))} />;
     case 'String':
-    default:
+    case undefined:
       return <input id={id} type="text" value={value} onChange={ev => onChange(String(ev.target.value))}/>;
+    default:
+      const Editor = editors[type];
+      return <Editor id={id} value={value} onChange={onChange} />;
   }
 }
 
@@ -23,6 +27,7 @@ const PropertyField = ({ id, label, value, type, readOnly, onChange }) => (
 );
 
 PropertyField.propTypes = {
+  id: React.PropTypes.string.isRequired,
   label: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   value: React.PropTypes.any.isRequired,

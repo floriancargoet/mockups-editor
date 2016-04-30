@@ -10,6 +10,7 @@
    - data grid, menu, searchbox
 
 ## Should have
+ - autosize (based on text content)
  - enter group
  - non-box components (arrows)
  - cut/copy/paste

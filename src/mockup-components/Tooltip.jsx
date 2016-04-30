@@ -74,7 +74,9 @@ Tooltip.propTypes = {
 Tooltip.editors = {
   text: 'String',
   backgroundColor: 'Color',
-  fontSize: 'Number'
+  fontSize: 'Number',
+  hAlign: 'HorizontalAlign',
+  vAlign: 'VerticalAlign'
 };
 
 Tooltip.create = (config = {}) => ({

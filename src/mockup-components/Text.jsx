@@ -26,7 +26,8 @@ Text.propTypes = {
 Text.editors = {
   text: 'String',
   fontSize: 'Number',
-  alignment: 'String'
+  hAlign: 'HorizontalAlign',
+  vAlign: 'VerticalAlign'
 };
 
 Text.create = (config = {}) => ({
