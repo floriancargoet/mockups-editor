@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import random from 'random-number-in-range';
 
+import ForeignText from './sub/ForeignText.jsx';
+
 function corner(a1, a2, radius) {
   const x2 = Math.cos(a1) * radius, y2 = -Math.sin(a1) * radius;
   const x = x2 + Math.cos(a2) * radius, y = y2 - Math.sin(a2) * radius;
@@ -46,9 +48,17 @@ class Tooltip extends Component {
     return (
       <svg height={height} width={width}>
         <path d={path} style={style} />
-        <foreignObject x={x0} y={y0} width={width - x0} height={height - y0}>
-          <div style={{ padding: 10 }}>{properties.text}</div>
-        </foreignObject>
+
+        <ForeignText
+          x={x0} y={y0} width={width - x0} height={height - y0}
+          hAlign={properties.hAlign} vAlign={properties.vAlign}
+          style={{
+            padding: 10,
+            fontSize: properties.fontSize
+          }}
+        >
+          {properties.text}
+        </ForeignText>
       </svg>
     );
   }
@@ -82,6 +92,8 @@ Tooltip.create = (config = {}) => ({
     fontSize: 16,
     strokeWidth: 2,
     radius: 5,
+    hAlign: 'left',
+    vAlign: 'top',
     ...config.properties
   }
 });

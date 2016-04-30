@@ -3,39 +3,34 @@ import random from 'random-number-in-range';
 
 import ForeignText from './sub/ForeignText.jsx';
 
-const Button = ({ width, height, properties }) => (
-  <svg height={height} width={width}>
-    <rect x="3" y="3" height={height - 3} width={width - 3} style={{ fill: '#000' }} />
-    <rect x="0" y="0" height={height - 3} width={width - 3}
-      style={{
-        fill: properties.backgroundColor,
-        stroke: '#000'
-      }}
-    />
+const Text = ({ width, height, properties }) => {
+  return (
+    <svg height={height} width={width}>
       <ForeignText
         x={0} y={0} width={width} height={height}
-        hAlign="center" vAlign="middle"
+        hAlign={properties.hAlign} vAlign={properties.vAlign}
         style={{ fontSize: properties.fontSize }}
       >
         {properties.text}
       </ForeignText>
-  </svg>
-);
+    </svg>
+  );
+};
 
-Button.propTypes = {
+Text.propTypes = {
   width: React.PropTypes.number.isRequired,
   height: React.PropTypes.number.isRequired,
   properties: React.PropTypes.object
 };
 
-Button.editors = {
+Text.editors = {
   text: 'String',
-  backgroundColor: 'Color',
-  fontSize: 'Number'
+  fontSize: 'Number',
+  alignment: 'String'
 };
 
-Button.create = (config = {}) => ({
-  type: 'Button',
+Text.create = (config = {}) => ({
+  type: 'Text',
   x: random(50, 500),
   y: random(50, 500),
   width: random(50, 200),
@@ -44,11 +39,12 @@ Button.create = (config = {}) => ({
   ...config,
 
   properties: {
-    text: 'click me',
-    backgroundColor: '#ccc',
+    text: '',
     fontSize: 16,
+    hAlign: 'left',
+    vAlign: 'top',
     ...config.properties
   }
 });
 
-export default Button;
+export default Text;

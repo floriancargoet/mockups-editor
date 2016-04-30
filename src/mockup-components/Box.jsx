@@ -1,6 +1,8 @@
 import React from 'react';
 import random from 'random-number-in-range';
 
+import ForeignText from './sub/ForeignText.jsx';
+
 const Box = ({ width, height, properties }) => (
   <svg height={height} width={width}>
     <rect x="0" y="0"
@@ -8,7 +10,12 @@ const Box = ({ width, height, properties }) => (
       style={{ fill: properties.backgroundColor }}
     >
     </rect>
-    <text x="10" y="30" fontSize={properties.fontSize}>{properties.text}</text>
+    <ForeignText
+      width={width} height={height}
+      style={{ fontSize: properties.fontSize }}
+    >
+      {properties.text}
+    </ForeignText>
   </svg>
 );
 

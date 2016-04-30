@@ -4,7 +4,7 @@
  - more components
    - on/off, icon button
    - checkbox, checkbox group, radio, radio group, select, datepicker, numberfield, textarea, input, fieldset
-   - label, line, paragraph, list, link, breadcrumbs
+   - label, line (auto width), list, link, breadcrumbs
    - image, shapes, scrollbars, hr, vr, splitters, sliders, progress
    - tabs, window, accordion
    - data grid, menu, searchbox
