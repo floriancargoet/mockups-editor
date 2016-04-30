@@ -25,6 +25,7 @@
     "classnames": "^2.2.3",
     "random-number-in-range": "*",
     "react": "^15.0.0",
+    "react-bootstrap": "^0.29.3",
     "react-dnd": "^2.1.4",
     "react-dnd-html5-backend": "*",
     "react-dnd-touch-backend": "^0.2.5",

@@ -11,7 +11,7 @@ export default class Editor extends React.Component {
     return (
       <div className="editor">
         <Layout type="column">
-          <Fixed style={{ height: 20 }}><Toolbar /></Fixed>
+          <Fixed style={{ }}><Toolbar /></Fixed>
           <Flex>
             <Layout type="row">
               <Flex style={{ height: '100%', overflow: 'hidden' /* fix SVG quirk */ }}>

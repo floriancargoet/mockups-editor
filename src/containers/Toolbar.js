@@ -7,7 +7,6 @@ import {
 } from '../actions';
 
 import Toolbar from '../components/Toolbar.jsx';
-import * as components from '../mockup-components/all';
 
 const mapStateToProps = (state) => {
   const selectedComponents = state.present.components.filter(c => state.present.selection.includes(c.id));
@@ -20,7 +19,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onButtonClicked: (type) => {
+    onButtonClicked: (type, ...args) => {
       switch (type) {
         case 'undo':
           dispatch(UndoActions.undo());
@@ -30,13 +29,8 @@ const mapDispatchToProps = (dispatch) => {
           dispatch(UndoActions.redo());
           break;
 
-        case 'createBox':
-          dispatch(addComponent(components.Box.create()));
-          dispatch(selectLastComponent());
-          break;
-
-        case 'createButton':
-          dispatch(addComponent(components.Button.create()));
+        case 'create':
+          dispatch(addComponent(args[0].create()));
           dispatch(selectLastComponent());
           break;
 
