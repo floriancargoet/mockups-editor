@@ -4,7 +4,7 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import classnames from 'classnames';
 
 import Resizable from './Resizable.jsx';
-import * as components from '../mockup-components/all';
+import * as components from '../mockup-components';
 
 const boxSource = {
   beginDrag(props) {

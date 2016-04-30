@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PropertyField from './PropertyField.jsx';
-import * as components from '../mockup-components/all';
+import * as components from '../mockup-components';
 
 function getEditorType(component, prop) {
   const Component = components[component.type];

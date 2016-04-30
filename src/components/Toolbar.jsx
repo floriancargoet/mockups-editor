@@ -1,6 +1,6 @@
 import React from 'react';
 import { DropdownButton, MenuItem, Button } from 'react-bootstrap';
-import * as components from '../mockup-components/all';
+import * as components from '../mockup-components';
 
 const buttonStyle = {
   margin: 5

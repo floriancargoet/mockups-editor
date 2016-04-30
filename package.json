@@ -2,7 +2,8 @@
   "name": "mockups-editor",
   "version": "0.0.1",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "generate-index": "node scripts/generate-index"
   },
   "devDependencies": {
     "babel-core": "^6.7.5",

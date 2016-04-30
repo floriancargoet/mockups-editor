@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import * as components from '../../mockup-components/all';
+import * as components from '../../mockup-components';
 
 
 export default class ComponentDragPreview extends Component {

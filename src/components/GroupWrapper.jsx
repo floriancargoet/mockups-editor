@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
-import * as components from '../mockup-components/all';
+import * as components from '../mockup-components';
 
 const boxSource = {
   beginDrag(props) {

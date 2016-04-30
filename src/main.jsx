@@ -14,7 +14,7 @@ import rootReducer from './reducers';
 // UI Root
 import Editor from './containers/Editor';
 
-import * as components from './mockup-components/all';
+import * as components from './mockup-components';
 
 const logger = createLogger({ collapsed: true });
 
