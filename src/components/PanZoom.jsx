@@ -81,7 +81,7 @@ export default class PanZoom extends Component {
 
   render() {
     const { zoomTransform, panX, panY, panning } = this.state;
-    const dragStyles = { cursor: panning ? "move" : "default" };
+    const dragStyles = { cursor: panning ? 'move' : 'default' };
     return (
       <DraggableCore
         allowAnyClick // enable all buttons, filter in drag callbacks
@@ -90,13 +90,33 @@ export default class PanZoom extends Component {
         onStop={this.onDragStop}
         handle={this.props.panHandle}
       >
-        <g transform={`translate(${panX}, ${panY})`} style={dragStyles}>
+        <g transform={`translate(${panX}, ${panY})`} style={dragStyles} onDoubleClick={this.onDoubleClick}>
           <g transform={zoomTransform} onWheel={this.onWheel}>
             {this.props.children}
           </g>
         </g>
       </DraggableCore>
     );
+  }
+
+  setScaleTransform(scale, transform) {
+    this.setState({
+      zoomTransform: transform
+    });
+    if (this.props.onZoom) {
+      this.props.onZoom({ zoomFactor: scale });
+    }
+  }
+
+  onDoubleClick = (ev) => {
+    if (ev.button !== 1) {
+      return;
+    }
+    this.setState({
+      panX: 0,
+      panY: 0
+    });
+    this.setScaleTransform(1, '');
   }
 
   onDragStart = (ev, { position }) => {
@@ -123,7 +143,7 @@ export default class PanZoom extends Component {
     const dx = position.clientX - this.state.startX;
     const dy = position.clientY - this.state.startY;
 
-    let minReached = this.state.minReached
+    let minReached = this.state.minReached;
 
     if (!minReached) {
       minReached = (dx * dx + dy * dy >= this.props.panMin * this.props.panMin);
@@ -160,11 +180,6 @@ export default class PanZoom extends Component {
     const zoomFactor = getZoomFactor(ev.deltaY, this.props.zoomSpeed);
 
     const { scale, transform } = getZoomTransform(ev.currentTarget, zoomX, zoomY, zoomFactor);
-    this.setState({
-      zoomTransform: transform
-    });
-    if (this.props.onZoom) {
-      this.props.onZoom({ zoomFactor: scale }); // cumulative factor
-    }
+    this.setScaleTransform(scale, transform);
   }
 }
