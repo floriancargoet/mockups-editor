@@ -39,6 +39,17 @@ TextField.editors = {
   strokeWidth: 'Number'
 };
 
+
+TextField.updateProperty = (component, property, value) => {
+  if (property === 'fontSize') {
+    return {
+      ...component,
+      height: 2 * value
+    };
+  }
+  return component;
+};
+
 TextField.create = (config = {}) => ({
   type: 'TextField',
   resize: 'horizontal',

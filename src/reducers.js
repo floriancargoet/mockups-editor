@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import undoable from 'redux-undo';
 import * as utils from './reducers-utils';
 import getID from './util/id';
+import * as mockupComponents from './mockup-components';
 
 import {
   MOVE_COMPONENT, RESIZE_COMPONENT, ADD_COMPONENT, UPDATE_COMPONENT_PROPERTY,
@@ -11,6 +12,7 @@ import {
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
   Z_MOVE_SELECTION, DUPLICATE_SELECTION
 } from './actions';
+
 
 function cascadeUpdateChildren(item, cb) {
   return update(item, {
@@ -43,6 +45,23 @@ function cascadeUpdate(item, cb) {
     }
   });
 }
+
+function callPropertyUpdater(component, property, value) {
+  const Component = mockupComponents[component.type];
+  if (typeof Component.updateProperty === 'function') {
+    return Component.updateProperty(component, property, value);
+  }
+  return component;
+}
+
+function callRootPropertyUpdater(component, property, value) {
+  const Component = mockupComponents[component.type];
+  if (typeof Component.updateRootProperty === 'function') {
+    return Component.updateRootProperty(component, property, value);
+  }
+  return component;
+}
+
 
 /*
 {
@@ -95,7 +114,7 @@ function components(state = [], action) {
     }
 
     case UPDATE_COMPONENT_PROPERTY: {
-      return update(state, {
+      state = update(state, {
         [index]: {
           properties: {
             $merge: {
@@ -104,14 +123,24 @@ function components(state = [], action) {
           }
         }
       });
+      return update(state, {
+        [index]: {
+          $apply: c => callPropertyUpdater(c, action.property, action.value)
+        }
+      });
     }
 
     case UPDATE_COMPONENT_ROOT_PROPERTY: {
-      return update(state, {
+      state = update(state, {
         [index]: {
           $merge: {
             [action.property]: action.value
           }
+        }
+      });
+      return update(state, {
+        [index]: {
+          $apply: c => callRootPropertyUpdater(c, action.property, action.value)
         }
       });
     }
