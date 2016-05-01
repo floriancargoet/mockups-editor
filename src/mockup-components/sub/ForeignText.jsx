@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 
-const ForeignText = ({ x, y, width, height, hAlign, vAlign, text, style, children }) => {
+const ForeignText = ({ x, y, width, height, hAlign, vAlign, text, noWrap, style, children }) => {
   style = {
     ...style,
     display: 'table-cell',
     textAlign: hAlign,
-    verticalAlign: vAlign
+    verticalAlign: vAlign,
+    whiteSpace: noWrap ? "no-wrap" : "default"
   };
   return (
     <foreignObject x={x} y={y} width={width} height={height}>
@@ -28,6 +29,7 @@ ForeignText.propTypes = {
   vAlign: PropTypes.oneOf(['top', 'middle', 'bottom']),
   fontSize: PropTypes.number,
   text: PropTypes.string,
+  noWrap: PropTypes.bool,
   style: PropTypes.object,
   children: PropTypes.any
 };
@@ -40,6 +42,7 @@ ForeignText.defaultProps = {
   hAlign: 'left',
   vAlign: 'top',
   text: '',
+  noWrap: false,
   style: {}
 };
 
