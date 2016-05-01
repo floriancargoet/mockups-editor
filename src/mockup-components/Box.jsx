@@ -41,7 +41,7 @@ Box.create = (config = {}) => ({
   ...config,
 
   properties: {
-    text: '',
+    text: 'Box',
     backgroundColor: '#bada55',
     fontSize: 16,
     ...config.properties

@@ -91,7 +91,7 @@ Tooltip.create = (config = {}) => ({
   ...config,
 
   properties: {
-    text: '',
+    text: 'This is a tooltip',
     backgroundColor: '#bada55',
     fontSize: 16,
     strokeWidth: 2,

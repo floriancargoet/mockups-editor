@@ -23,71 +23,20 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-store.dispatch(addComponent(components.Box.create({
-  width: 100,
-  height: 100,
-  x: 50,
-  y: 50,
-  properties: {
-    text: 'b1',
-    backgroundColor: 'pink'
-  }
-})));
-/*
-store.dispatch(addComponent(components.Box.create({
-  width: 150,
-  height: 100,
-  x: 90,
-  y: 60,
-  properties: {
-    text: 'b2'
-  }
-})));
 
-store.dispatch(addComponent(components.Title.create({
-  width: 150,
-  height: 50,
-  x: 190,
-  y: 160,
-  properties: {
-    text: 'Hello mockup'
+let x = 50, y = 50;
+const width = 150, height = 150;
+Object.keys(components).forEach(type => {
+  store.dispatch(addComponent(components[type].create({
+    x, y, width, height
+  })));
+  x += 200;
+  if (x > 1200) {
+    y += 200;
+    x = 50;
   }
-})));
+});
 
-store.dispatch(addComponent(components.Button.create({
-  width: 80,
-  height: 40,
-  x: 350,
-  y: 350,
-  properties: {
-    backgroundColor: 'lime'
-  }
-})));
-
-store.dispatch(addComponent(components.ButtonBar.create({
-  width: 300,
-  height: 50,
-  x: 150,
-  y: 450,
-  properties: {
-    text: 'Button 1, Press me, Hello world'
-  }
-})));
-
-store.dispatch(addComponent(components.Path.create({
-  x: 150,
-  y: 450
-})));
-*/
-store.dispatch(addComponent(components.Tooltip.create({
-  x: 100,
-  y: 100,
-  width: 200,
-  height: 200,
-  properties: {
-    text: 'lorem ipsum lorem ipsum lorem ipsum lorem ipsum. lorem ipsum lorem ipsum lorem ipsum lorem ipsum !'
-  }
-})));
 
 const rootComponent = (
   <Provider store={store}>

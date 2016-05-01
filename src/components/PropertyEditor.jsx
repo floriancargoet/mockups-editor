@@ -46,6 +46,7 @@ class PropertyEditor extends Component {
       <div className="property-editor">
         <Grid fluid>
           <Form horizontal>
+            <h2>{component.type}</h2>
             {
               rootPropsEditors.map(({ prop, editor }) => (
                 <PropertyField

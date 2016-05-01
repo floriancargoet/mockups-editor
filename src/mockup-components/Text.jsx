@@ -40,7 +40,7 @@ Text.create = (config = {}) => ({
   ...config,
 
   properties: {
-    text: '',
+    text: 'Some text on multiple lines.',
     fontSize: 16,
     hAlign: 'left',
     vAlign: 'top',
