@@ -13,20 +13,20 @@ const Toolbar = ({ onButtonClicked, selection, selectionContainsGroup }) => {
     <ButtonToolbar style={toolbarStyle}>
 
       <ButtonGroup>
-        <Button onClick={() => onButtonClicked('undo')}>
-          <Icon name="fa-undo" title="Undo" />
+        <Button title="Undo" onClick={() => onButtonClicked('undo')}>
+          <Icon name="fa-undo" />
           <SR>Undo</SR>
         </Button>
-        <Button onClick={() => onButtonClicked('redo')}>
-          <Icon name="fa-repeat" title="Redo" />
+        <Button title="Redo" onClick={() => onButtonClicked('redo')}>
+          <Icon name="fa-repeat" />
           <SR>Redo</SR>
         </Button>
       </ButtonGroup>
 
-      <DropdownButton title={<span><Icon name="fa-plus" /> Add component</span>}>
+      <DropdownButton id="add-component" title={<span><Icon name="fa-plus" /> Add component</span>}>
         {
           Object.keys(components).map(componentName => (
-            <MenuItem onClick={() => onButtonClicked('create', components[componentName])}>{componentName}</MenuItem>
+            <MenuItem key={componentName} onClick={() => onButtonClicked('create', components[componentName])}>{componentName}</MenuItem>
           ))
         }
       </DropdownButton>

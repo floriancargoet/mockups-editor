@@ -13,11 +13,11 @@ export default class Editor extends React.Component {
         <Layout type="column">
           <Fixed style={{ }}><Toolbar /></Fixed>
           <Flex>
-            <Layout type="row">
+            <Layout type="not-column">{/* FIXME: 'row' conflicts with boostrap */}
               <Flex style={{ height: '100%', overflow: 'hidden' /* fix SVG quirk */ }}>
                 <Workspace />
               </Flex>
-              <Fixed style={{ width: 350 }}>
+              <Fixed style={{ width: 450 }}>
                 <Debugger />
                 <PropertyEditor />
               </Fixed>

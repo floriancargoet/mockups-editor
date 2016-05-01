@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Form, Button, Grid } from 'react-bootstrap';
 
 import PropertyField from './PropertyField.jsx';
 import * as components from '../mockup-components';
@@ -12,13 +12,13 @@ function getEditorType(component, prop) {
   return 'String';
 }
 
-const rootPropsEditors = {
-  x: 'Number',
-  y: 'Number',
-  width: 'Number',
-  height: 'Number',
-  locked: 'Boolean'
-};
+const rootPropsEditors = [
+  { prop: 'locked', editor: 'Lock' },
+  { prop: 'x', editor: 'Number' },
+  { prop: 'y', editor: 'Number' },
+  { prop: 'width', editor: 'Number' },
+  { prop: 'height', editor: 'Number' }
+];
 
 class PropertyEditor extends Component {
 
@@ -44,36 +44,40 @@ class PropertyEditor extends Component {
     }
     return (
       <div className="property-editor">
-        {
-          Object.keys(rootPropsEditors).map(prop => (
-            <PropertyField
-              key={prop} id={prop} label={prop}
-              type={rootPropsEditors[prop]}
-              value={component[prop]}
-              readOnly={component.locked && prop !== 'locked'}
-              onChange={value => onRootPropertyChange(component, prop, value)}
-            />
-          ))
-        }
-        {
-          Object.keys(component.properties).map(prop => (
-            <PropertyField
-              key={prop} id={prop} label={prop}
-              type={getEditorType(component, prop)}
-              value={component.properties[prop]}
-              readOnly={component.locked}
-              onChange={value => onPropertyChange(component, prop, value)}
-            />
-          ))
-        }
-        <Button onClick={this.onDebugClick}>Debug Info</Button>
-        {
-          debug
-            ? <pre>
-                {JSON.stringify(component, null, 2)}
-              </pre>
-            : null
-        }
+        <Grid fluid>
+          <Form horizontal>
+            {
+              rootPropsEditors.map(({ prop, editor }) => (
+                <PropertyField
+                  key={prop} id={prop} label={prop}
+                  type={editor}
+                  value={component[prop]}
+                  readOnly={component.locked && prop !== 'locked'}
+                  onChange={value => onRootPropertyChange(component, prop, value)}
+                />
+              ))
+            }
+            {
+              Object.keys(component.properties).map(prop => (
+                <PropertyField
+                  key={prop} id={prop} label={prop}
+                  type={getEditorType(component, prop)}
+                  value={component.properties[prop]}
+                  readOnly={component.locked}
+                  onChange={value => onPropertyChange(component, prop, value)}
+                />
+              ))
+            }
+            <Button onClick={this.onDebugClick}>Debug Info</Button>
+            {
+              debug
+                ? <pre>
+                    {JSON.stringify(component, null, 2)}
+                  </pre>
+                : null
+            }
+          </Form>
+        </Grid>
       </div>
     );
   }
