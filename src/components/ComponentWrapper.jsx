@@ -96,6 +96,8 @@ class ComponentWrapper extends Component {
     if (!config.locked) {
       component = connectDragSource(component);
     }
+    // resizing constraints
+    const resize = config.resize || 'both';
 
     return (
       <Resizable
@@ -103,6 +105,8 @@ class ComponentWrapper extends Component {
         width={width} height={height}
         showBorder={selected && !isDragging}
         showHandles={selected && !isDragging && !config.locked}
+        vertical={resize === 'both' || resize === 'vertical'}
+        horizontal={resize === 'both' || resize === 'horizontal'}
         zoomFactor={zoomFactor} // to keep an un-zoomed appearence
         onResizeStart={this.onResizeStart}
         onResize={this.onResize}

@@ -42,6 +42,11 @@ class PropertyEditor extends Component {
     if (!component) {
       return (<div className="property-editor"></div>);
     }
+
+    // resizing constraints
+    const widthRO = (component.resize === 'vertical');
+    const heightRO = (component.resize === 'horizontal');
+
     return (
       <div className="property-editor">
         <Grid fluid>
@@ -53,7 +58,7 @@ class PropertyEditor extends Component {
                   key={prop} id={prop} label={prop}
                   type={editor}
                   value={component[prop]}
-                  readOnly={component.locked && prop !== 'locked'}
+                  readOnly={(component.locked && prop !== 'locked') || (widthRO && prop === 'width') || (heightRO && prop === 'height') }
                   onChange={value => onRootPropertyChange(component, prop, value)}
                 />
               ))

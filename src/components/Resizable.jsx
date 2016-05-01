@@ -89,7 +89,14 @@ export default class Resizable extends Component {
     y: PropTypes.number.isRequired,
     showBorder: PropTypes.bool.isRequired,
     showHandles: PropTypes.bool.isRequired,
-    zoomFactor: PropTypes.number.isRequired
+    zoomFactor: PropTypes.number.isRequired,
+    vertical: PropTypes.bool,
+    horizontal: PropTypes.bool
+  };
+
+  static defaultProps = {
+    vertical: true,
+    horizontal: true
   };
 
   constructor(props) {
@@ -127,7 +134,7 @@ export default class Resizable extends Component {
   }
 
   renderResizers() {
-    const { width, height, zoomFactor } = this.props;
+    const { width, height, zoomFactor, horizontal, vertical } = this.props;
     const size = 10 / zoomFactor;
     const commonProps = {
       size: size,
@@ -135,16 +142,30 @@ export default class Resizable extends Component {
       onResize: this.onResize,
       onResizeStop: this.onResizeStop
     };
-    return [
-      ['se', width + size, height + size],
-      ['nw', 0, 0],
-      ['ne', width + size, 0],
-      ['sw', 0, height + size],
-      ['n', (width + size) / 2, 0],
-      ['e', width + size, (height + size) / 2],
-      ['s', (width + size) / 2, height + size],
-      ['w', 0, (height + size) / 2]
-    ].map(([position, x, y]) =>
+
+    const handles = [];
+    if (vertical) {
+      handles.push(
+        ['n', (width + size) / 2, 0],
+        ['s', (width + size) / 2, height + size]
+      );
+    }
+    if (horizontal) {
+      handles.push(
+        ['e', width + size, (height + size) / 2],
+        ['w', 0, (height + size) / 2]
+      );
+    }
+    if (horizontal && vertical) {
+      handles.push(
+        ['se', width + size, height + size],
+        ['nw', 0, 0],
+        ['ne', width + size, 0],
+        ['sw', 0, height + size],
+      );
+    }
+
+    return handles.map(([position, x, y]) =>
       <ResizeHandle {...{ ...commonProps, x, y, position }} key={position} />
     );
   }
