@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import { FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
 
-const Color = ({ id, label, value, readOnly, onChange }) => (
+const StringEditor = ({ id, label, value, readOnly, onChange }) => (
   <FormGroup controlId={id}>
     <Col componentClass={ControlLabel} xs={3}>{label}</Col>
     <Col xs={9}>
       <FormControl
-        type="color"
+        type="text"
         value={value}
-        disabled={readOnly}
+        readOnly={readOnly}
         onChange={ev => onChange(ev.target.value)}
       />
       <FormControl.Feedback />
@@ -16,7 +16,8 @@ const Color = ({ id, label, value, readOnly, onChange }) => (
   </FormGroup>
 );
 
-Color.propTypes = {
+
+StringEditor.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
@@ -24,4 +25,4 @@ Color.propTypes = {
   onChange: PropTypes.func
 };
 
-export default Color;
+export default StringEditor;

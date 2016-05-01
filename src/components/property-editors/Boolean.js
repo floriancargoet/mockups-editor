@@ -1,22 +1,22 @@
 import React, { PropTypes } from 'react';
-import { FormGroup, ControlLabel, FormControl, Col } from 'react-bootstrap';
+import { FormGroup, ControlLabel, Checkbox, Col } from 'react-bootstrap';
 
-const Color = ({ id, label, value, readOnly, onChange }) => (
+const BooleanEditor = ({ id, label, value, readOnly, onChange }) => (
   <FormGroup controlId={id}>
     <Col componentClass={ControlLabel} xs={3}>{label}</Col>
     <Col xs={9}>
-      <FormControl
-        type="color"
-        value={value}
-        disabled={readOnly}
-        onChange={ev => onChange(ev.target.value)}
+      <Checkbox
+        type="checkbox"
+        checked={value}
+        readOnly={readOnly}
+        onChange={ev => onChange(ev.target.checked)}
       />
-      <FormControl.Feedback />
     </Col>
   </FormGroup>
 );
 
-Color.propTypes = {
+
+BooleanEditor.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.any.isRequired,
@@ -24,4 +24,4 @@ Color.propTypes = {
   onChange: PropTypes.func
 };
 
-export default Color;
+export default BooleanEditor;

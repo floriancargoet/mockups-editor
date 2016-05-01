@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { PropTypes, Component } from 'react';
+import { Button } from 'react-bootstrap';
 
 import PropertyField from './PropertyField.jsx';
 import * as components from '../mockup-components';
 
 function getEditorType(component, prop) {
-  const Component = components[component.type];
-  if (Component && Component.editors && Component.editors[prop]) {
-    return Component.editors[prop];
+  const MockupComponent = components[component.type];
+  if (MockupComponent && MockupComponent.editors && MockupComponent.editors[prop]) {
+    return MockupComponent.editors[prop];
   }
   return 'String';
 }
@@ -19,43 +20,70 @@ const rootPropsEditors = {
   locked: 'Boolean'
 };
 
-const PropertyEditor = ({ component, onPropertyChange, onRootPropertyChange }) => {
-  if (!component) {
-    return (<div className="property-editor"></div>);
+class PropertyEditor extends Component {
+
+  static propTypes = {
+    component: PropTypes.object,
+    onPropertyChange: PropTypes.func,
+    onRootPropertyChange: PropTypes.func
   }
-  return (
-    <div className="property-editor">
-      {
-        Object.keys(rootPropsEditors).map(prop => (
-          <PropertyField
-            key={prop} id={prop} label={prop}
-            type={rootPropsEditors[prop]}
-            value={component[prop]}
-            onChange={value => onRootPropertyChange(component, prop, value)}
-          />
-        ))
-      }
-      {
-        Object.keys(component.properties).map(prop => (
-          <PropertyField
-            key={prop} id={prop} label={prop}
-            type={getEditorType(component, prop)}
-            value={component.properties[prop]}
-            onChange={value => onPropertyChange(component, prop, value)}
-          />
-        ))
-      }
-      <pre>
-        {JSON.stringify(component, null, 2)}
-      </pre>
-    </div>
-  );
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      debug: false
+    };
+  }
+
+  render() {
+    const { component, onPropertyChange, onRootPropertyChange } = this.props;
+    const { debug } = this.state;
+
+    if (!component) {
+      return (<div className="property-editor"></div>);
+    }
+    return (
+      <div className="property-editor">
+        {
+          Object.keys(rootPropsEditors).map(prop => (
+            <PropertyField
+              key={prop} id={prop} label={prop}
+              type={rootPropsEditors[prop]}
+              value={component[prop]}
+              readOnly={component.locked && prop !== 'locked'}
+              onChange={value => onRootPropertyChange(component, prop, value)}
+            />
+          ))
+        }
+        {
+          Object.keys(component.properties).map(prop => (
+            <PropertyField
+              key={prop} id={prop} label={prop}
+              type={getEditorType(component, prop)}
+              value={component.properties[prop]}
+              readOnly={component.locked}
+              onChange={value => onPropertyChange(component, prop, value)}
+            />
+          ))
+        }
+        <Button onClick={this.onDebugClick}>Debug Info</Button>
+        {
+          debug
+            ? <pre>
+                {JSON.stringify(component, null, 2)}
+              </pre>
+            : null
+        }
+      </div>
+    );
+  }
+
+  onDebugClick = () => {
+    this.setState({
+      debug: !(this.state.debug)
+    });
+  }
 };
 
-PropertyEditor.propTypes = {
-  component: React.PropTypes.object,
-  onPropertyChange: React.PropTypes.func,
-  onRootPropertyChange: React.PropTypes.func
-};
 
 export default PropertyEditor;

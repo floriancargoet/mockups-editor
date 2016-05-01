@@ -1,6 +1,6 @@
 ## Must have
  - selection dnd
- - property editor (Color, Range, custom)
+ - property editor (Range, TextArea)
  - more components
    - on/off, icon button
    - checkbox, checkbox group, radio, radio group, select, datepicker, numberfield, textarea, input, fieldset

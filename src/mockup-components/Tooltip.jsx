@@ -75,6 +75,8 @@ Tooltip.editors = {
   text: 'String',
   backgroundColor: 'Color',
   fontSize: 'Number',
+  strokeWidth: 'Number',
+  radius: 'Number',
   hAlign: 'HorizontalAlign',
   vAlign: 'VerticalAlign'
 };
