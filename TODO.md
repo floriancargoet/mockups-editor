@@ -3,7 +3,7 @@
  - property editor (Range, TextArea)
  - more components
    - on/off, icon button
-   - checkbox, checkbox group, radio, radio group, select, datepicker, numberfield, textarea, fieldset
+   - checkbox, checkbox group, radio, radio group, select, datepicker, fieldset
    - label, line (auto width), list, link, breadcrumbs
    - image, shapes, scrollbars, hr, vr, splitters, sliders, progress
    - tabs, window, accordion

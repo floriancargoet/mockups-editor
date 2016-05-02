@@ -5,6 +5,7 @@ export Image from './Image.jsx';
 export NumberField from './NumberField.jsx';
 export Path from './Path.jsx';
 export Text from './Text.jsx';
+export TextArea from './TextArea.jsx';
 export TextField from './TextField.jsx';
 export Title from './Title.jsx';
 export Tooltip from './Tooltip.jsx';
