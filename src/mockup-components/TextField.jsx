@@ -9,7 +9,7 @@ const TextField = ({ width, height, properties }) => {
   const style = {
     strokeWidth: properties.strokeWidth,
     stroke: 'black',
-    fill: 'none'
+    fill: properties.backgroundColor
   };
   const m = properties.strokeWidth / 2;
 
@@ -34,6 +34,7 @@ TextField.propTypes = {
 };
 
 TextField.editors = {
+  backgroundColor: 'Color',
   value: 'String',
   fontSize: 'Number',
   strokeWidth: 'Number'
@@ -62,6 +63,7 @@ TextField.create = (config = {}) => ({
 
   properties: {
     value: 'TextField',
+    backgroundColor: '#FFFFFF',
     fontSize: 16,
     strokeWidth: 2,
     ...config.properties

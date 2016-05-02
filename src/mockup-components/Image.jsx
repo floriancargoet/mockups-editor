@@ -10,7 +10,7 @@ class Image extends Component {
     const style = {
       strokeWidth: properties.strokeWidth,
       stroke: 'black',
-      fill: 'none'
+      fill: properties.backgroundColor
     };
     const m = properties.strokeWidth / 2;
     return (
@@ -39,6 +39,7 @@ Image.propTypes = {
 };
 
 Image.editors = {
+  backgroundColor: 'Color',
   strokeWidth: 'Number',
   radius: 'Number'
 };
@@ -53,6 +54,7 @@ Image.create = (config = {}) => ({
   ...config,
 
   properties: {
+    backgroundColor: '#FFFFFF',
     strokeWidth: 2,
     radius: 0,
     ...config.properties
