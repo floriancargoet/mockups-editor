@@ -1,37 +1,65 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import random from 'random-number-in-range';
 
-const Title = ({ width, height, properties }) => (
-  <svg height={height} width={width}>
-    <text x="50%" y="50%" textAnchor="middle" fontSize={properties.fontSize}>{properties.text}</text>
-  </svg>
-);
+import ForeignText from './sub/ForeignText.jsx';
 
-Title.propTypes = {
-  width: React.PropTypes.number.isRequired,
-  height: React.PropTypes.number.isRequired,
-  properties: React.PropTypes.object
-};
 
-Title.editors = {
-  text: 'String',
-  fontSize: 'Number'
-};
+export default class Title extends Component {
 
-Title.create = (config = {}) => ({
-  type: 'Title',
-  x: random(50, 500),
-  y: random(50, 500),
-  width: random(50, 200),
-  height: random(50, 200),
-  locked: false,
-  ...config,
-
-  properties: {
-    text: 'Title',
-    fontSize: 20,
-    ...config.properties
+  static propTypes = {
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    properties: PropTypes.object
   }
-});
 
-export default Title;
+  static editors = {
+    text: 'String',
+    fontSize: 'Number',
+    hAlign: 'HorizontalAlign'
+  }
+
+  static updateProperty = (component, property, value) => {
+    if (property === 'fontSize') {
+      return {
+        ...component,
+        height: 1.5 * value
+      };
+    }
+    return component;
+  }
+
+  static create = (config = {}) => ({
+    type: 'Title',
+    resize: 'horizontal',
+    x: random(50, 500),
+    y: random(50, 500),
+    width: random(50, 200),
+    locked: false,
+    ...config,
+    height: 32 * 1.5, // override
+
+    properties: {
+      text: 'Title',
+      fontSize: 32,
+      hAlign: 'center',
+      ...config.properties
+    }
+  })
+
+  render() {
+    const { width, height, properties } = this.props;
+
+    return (
+      <svg height={height} width={width}>
+        <ForeignText
+          x={0} y={0} width={width} height={height}
+          vAlign="middle" hAlign={properties.hAlign} noWrap
+          style={{ fontSize: properties.fontSize }}
+        >
+          {properties.text}
+        </ForeignText>
+      </svg>
+    );
+
+  }
+}
