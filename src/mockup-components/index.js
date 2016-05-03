@@ -1,6 +1,7 @@
 export Box from './Box.jsx';
 export Button from './Button.jsx';
 export ButtonBar from './ButtonBar.jsx';
+export Checkbox from './Checkbox.jsx';
 export Image from './Image.jsx';
 export NumberField from './NumberField.jsx';
 export Path from './Path.jsx';
