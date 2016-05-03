@@ -6,6 +6,7 @@ const BooleanEditor = ({ id, label, value, readOnly, onChange }) => (
     <Col componentClass={ControlLabel} xs={3}>{label}</Col>
     <Col xs={9}>
       <Checkbox
+        id={id}
         type="checkbox"
         checked={value}
         readOnly={readOnly}
