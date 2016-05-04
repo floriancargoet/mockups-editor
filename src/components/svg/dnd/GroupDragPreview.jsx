@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import * as components from '../../mockup-components';
+import * as components from '../../../mockup-components';
 
 export default class GroupDragPreview extends Component {
 

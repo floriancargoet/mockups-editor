@@ -3,7 +3,7 @@ import { Layout, Fixed, Flex } from 'react-layout-pane';
 
 import Toolbar from '../containers/Toolbar';
 import MockupSelector from '../containers/MockupSelector';
-import Workspace from './Workspace.jsx';
+import Workspace from './svg/Workspace.jsx';
 import PropertyEditor from '../containers/PropertyEditor';
 import Debugger from '../containers/Debugger';
 

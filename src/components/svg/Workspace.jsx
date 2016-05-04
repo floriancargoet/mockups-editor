@@ -7,7 +7,7 @@ import { default as TouchBackend } from 'react-dnd-touch-backend';
 import CustomDragLayer from './dnd/CustomDragLayer.jsx';
 import PanZoom from './PanZoom.jsx';
 
-import ComponentsContainer from '../containers/ComponentsContainer';
+import ComponentsContainer from '../../containers/svg/ComponentsContainer';
 
 
 class Workspace extends React.Component {

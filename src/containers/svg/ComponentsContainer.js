@@ -3,9 +3,9 @@ import {
   resizeComponent, moveComponent,
   selectOneComponent, selectComponent,
   clearSelection
-} from '../actions';
+} from '../../actions';
 
-import ComponentsContainer from '../components/ComponentsContainer.jsx';
+import ComponentsContainer from '../../components/svg/ComponentsContainer.jsx';
 
 const mapStateToProps = (state) => {
   const index = state.present.currentMockup;
