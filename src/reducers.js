@@ -12,7 +12,7 @@ import {
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
   Z_MOVE_SELECTION, DUPLICATE_SELECTION,
 
-  ADD_MOCKUP, SELECT_MOCKUP
+  ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP
 } from './actions';
 
 
@@ -76,6 +76,15 @@ function callRootPropertyUpdater(component, property, value) {
   }]
 }
 */
+
+function name(state = 'Untitled', action) {
+  switch (action.type) {
+    case RENAME_MOCKUP:
+      return action.name;
+    default:
+      return state;
+  }
+}
 
 function components(state = [], action) {
   const index = state.findIndex(c => c.id === action.id);
@@ -357,6 +366,7 @@ function fullMockup(state = {}, action) {
 
 
 const combinedMockup = combineReducers({
+  name,
   components,
   selection,
   last

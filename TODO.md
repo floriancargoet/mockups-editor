@@ -1,7 +1,6 @@
 ## Must have
  - multiple mockups at once
    - separated panzoom
-   - mockup selector
    - mockup thumbnail
  - selection dnd
  - property editor (Range, TextArea)

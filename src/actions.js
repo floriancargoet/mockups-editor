@@ -19,6 +19,7 @@ export const DUPLICATE_SELECTION = 'DUPLICATE_SELECTION';
 
 export const ADD_MOCKUP = 'ADD_MOCKUP';
 export const SELECT_MOCKUP = 'SELECT_MOCKUP';
+export const RENAME_MOCKUP = 'RENAME_MOCKUP';
 
 
 export function moveComponent(id, x, y) {
@@ -86,4 +87,9 @@ export function addMockup() {
 
 export function selectMockup(index) {
   return { type: SELECT_MOCKUP, index };
+}
+
+export function renameMockup(name) {
+  // current mockup
+  return { type: RENAME_MOCKUP, name };
 }
