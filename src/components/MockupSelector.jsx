@@ -7,11 +7,12 @@ export default class MockupSelector extends Component {
   static propTypes = {
     mockups: PropTypes.array.isRequired,
     currentMockup: PropTypes.number.isRequired,
-    onMockupClicked: PropTypes.func.isRequired
+    onMockupClicked: PropTypes.func.isRequired,
+    onMockupDoubleClicked: PropTypes.func.isRequired
   }
 
   render() {
-    const { mockups, onMockupClicked, currentMockup } = this.props;
+    const { mockups, onMockupClicked, onMockupDoubleClicked, currentMockup } = this.props;
     return (
       <ButtonGroup vertical>
       {
@@ -19,6 +20,7 @@ export default class MockupSelector extends Component {
           <Button
             key={i} active={i === currentMockup}
             onClick={() => onMockupClicked(i)}
+            onDoubleClick={() => onMockupDoubleClicked(i)}
           >
             {m.name}
           </Button>
