@@ -9,7 +9,7 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 // App
-import { addComponent } from './actions';
+import { addComponent, addMockup, selectMockup } from './actions';
 import rootReducer from './reducers';
 // UI Root
 import Editor from './containers/Editor';
@@ -22,6 +22,9 @@ const store = createStore(
   rootReducer,
   applyMiddleware(thunk, logger)
 );
+
+store.dispatch(addMockup());
+store.dispatch(selectMockup(0));
 
 
 let x = 50, y = 50;
@@ -36,6 +39,17 @@ Object.keys(components).forEach(type => {
     x = 50;
   }
 });
+
+/*
+store.dispatch(addMockup());
+store.dispatch(selectMockup(1));
+store.dispatch(addComponent(components.Title.create({
+  x: 0, y: 0, width: 200,
+  properties: {
+    text: 'Mockup #2'
+  }
+})));
+*/
 
 
 const rootComponent = (

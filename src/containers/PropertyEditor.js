@@ -4,9 +4,11 @@ import { updateComponentProperty, updateComponentRootProperty } from '../actions
 import PropertyEditor from '../components/PropertyEditor.jsx';
 
 const mapStateToProps = (state) => {
+  const index = state.present.currentMockup;
+  const mockup = state.present.mockups[index];
   return {
-    component: (state.present.selection.length === 1)
-      ? state.present.components.find(c => c.id === state.present.selection[0])
+    component: (mockup.selection.length === 1)
+      ? mockup.components.find(c => c.id === mockup.selection[0])
       : null
   };
 };

@@ -8,9 +8,11 @@ import {
 import ComponentsContainer from '../components/ComponentsContainer.jsx';
 
 const mapStateToProps = (state) => {
+  const index = state.present.currentMockup;
+  const mockup = state.present.mockups[index];
   return {
-    components: state.present.components,
-    selection: state.present.selection
+    components: mockup.components,
+    selection: mockup.selection
   };
 };
 

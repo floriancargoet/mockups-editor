@@ -9,10 +9,12 @@ import {
 import Toolbar from '../components/Toolbar.jsx';
 
 const mapStateToProps = (state) => {
-  const selectedComponents = state.present.components.filter(c => state.present.selection.includes(c.id));
+  const index = state.present.currentMockup;
+  const mockup = state.present.mockups[index];
+  const selectedComponents = mockup.components.filter(c => mockup.selection.includes(c.id));
   return {
-    components: state.present.components,
-    selection: state.present.selection,
+    components: mockup.components,
+    selection: mockup.selection,
     selectionContainsGroup: (selectedComponents.filter(c => c.type === '__Group__').length > 0)
   };
 };

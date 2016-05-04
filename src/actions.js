@@ -17,6 +17,10 @@ export const UNGROUP_SELECTION = 'UNGROUP_SELECTION';
 export const Z_MOVE_SELECTION = 'Z_MOVE_SELECTION';
 export const DUPLICATE_SELECTION = 'DUPLICATE_SELECTION';
 
+export const ADD_MOCKUP = 'ADD_MOCKUP';
+export const SELECT_MOCKUP = 'SELECT_MOCKUP';
+
+
 export function moveComponent(id, x, y) {
   return { type: MOVE_COMPONENT, id, x, y };
 }
@@ -74,4 +78,12 @@ export function updateComponentRootProperty(id, property, value) {
 
 export function duplicateSelection() {
   return { type: DUPLICATE_SELECTION };
+}
+
+export function addMockup() {
+  return { type: ADD_MOCKUP };
+}
+
+export function selectMockup(index) {
+  return { type: SELECT_MOCKUP, index };
 }

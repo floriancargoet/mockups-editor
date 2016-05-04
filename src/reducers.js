@@ -10,7 +10,9 @@ import {
   UPDATE_COMPONENT_ROOT_PROPERTY,
   SELECT_COMPONENT, SELECT_ONE_COMPONENT, SELECT_LAST_COMPONENT,
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
-  Z_MOVE_SELECTION, DUPLICATE_SELECTION
+  Z_MOVE_SELECTION, DUPLICATE_SELECTION,
+
+  ADD_MOCKUP, SELECT_MOCKUP
 } from './actions';
 
 
@@ -65,11 +67,16 @@ function callRootPropertyUpdater(component, property, value) {
 
 /*
 {
-  components: [component...],
-  last: id,
-  selection: [id, ...]
+  currentMockup: index,
+  mockups: [{
+    name: "",
+    components: [component...],
+    last: id,
+    selection: [id, ...]
+  }]
 }
 */
+
 function components(state = [], action) {
   const index = state.findIndex(c => c.id === action.id);
 
@@ -150,7 +157,6 @@ function components(state = [], action) {
   }
 }
 
-
 function selection(state = [], action) {
   // create a new state only if the state is not reusable
   // it's better for undo/redo
@@ -170,10 +176,14 @@ function selection(state = [], action) {
   }
 }
 
+function last(state = null, action) {
+  return state;
+}
+
 /*
  * Actions on multiple parts of the state tree *
  */
-function fullState(state = {}, action) {
+function fullMockup(state = {}, action) {
   switch (action.type) {
 
     case ADD_COMPONENT: {
@@ -345,19 +355,59 @@ function fullState(state = {}, action) {
   }
 }
 
-function last(state = null, action) {
-  return state;
-}
 
-
-const combined = combineReducers({
+const combinedMockup = combineReducers({
   components,
   selection,
   last
 });
 
+function mockup(state, action) {
+  return fullMockup(combinedMockup(state, action), action);
+}
+
+
+function currentMockup(state = 0, action) {
+  switch (action.type) {
+    case SELECT_MOCKUP:
+      return action.index;
+    default:
+      return state;
+  }
+}
+
+function mockups(state = [], action) {
+
+  switch (action.type) {
+    case ADD_MOCKUP:
+      return [...state, mockup(undefined, action)];
+    default:
+      return state;
+  }
+}
+
+
 function rootReducer(state, action) {
-  return fullState(combined(state, action), action);
+  if (!state) {
+    state = {
+      currentMockup: 0,
+      mockups: []
+    };
+  }
+
+  state = {
+    currentMockup: currentMockup(state.currentMockup, action),
+    mockups: mockups(state.mockups, action)
+  };
+
+  // delegate to mockup reducer but only on the current mockup
+  return update(state, {
+    mockups: {
+      [state.currentMockup]: {
+        $apply: m => mockup(m, action)
+      }
+    }
+  });
 }
 
 export default undoable(rootReducer, {
