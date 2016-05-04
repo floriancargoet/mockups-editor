@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  selectMockup, renameMockup
+  selectMockup, renameMockup, addMockup
 } from '../actions';
 
 import MockupSelector from '../components/MockupSelector.jsx';
@@ -18,6 +18,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(selectMockup(index));
       const name = prompt('New name');
       dispatch(renameMockup(name));
+    },
+    onAddClicked: () => {
+      dispatch(addMockup());
+      dispatch(selectMockup(-1));
     }
   };
 };

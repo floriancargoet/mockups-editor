@@ -379,8 +379,6 @@ function mockup(state, action) {
 
 function currentMockup(state = 0, action) {
   switch (action.type) {
-    case SELECT_MOCKUP:
-      return action.index;
     default:
       return state;
   }
@@ -398,6 +396,8 @@ function mockups(state = [], action) {
 
 
 function rootReducer(state, action) {
+
+  // Initial root state
   if (!state) {
     state = {
       currentMockup: 0,
@@ -405,10 +405,27 @@ function rootReducer(state, action) {
     };
   }
 
+  // Root props reducers
   state = {
     currentMockup: currentMockup(state.currentMockup, action),
     mockups: mockups(state.mockups, action)
   };
+
+  // Top-level reducer (needs to access all root props)
+  switch (action.type) {
+    case SELECT_MOCKUP: {
+      let index = action.index;
+      // negative indices
+      if (index < 0) {
+        index += state.mockups.length;
+      }
+      state = update(state, {
+        currentMockup: {
+          $set: index
+        }
+      });
+    }
+  }
 
   // delegate to mockup reducer but only on the current mockup
   return update(state, {
