@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import ComponentDragPreview from './ComponentDragPreview.jsx';
-import GroupDragPreview from './GroupDragPreview.jsx';
 import { DragLayer } from 'react-dnd';
+import * as components from '../../../mockup-components';
 
 class CustomDragLayer extends Component {
   static propTypes = {
@@ -15,33 +14,34 @@ class CustomDragLayer extends Component {
     zoomFactor: PropTypes.number.isRequired
   };
 
-  renderItem(type, item) {
-    switch (type) {
-      case 'mockup-component':
-        return (
-          <ComponentDragPreview item={item}/>
-        );
-      case 'mockup-group':
-        return (
-          <GroupDragPreview item={item}/>
-        );
-      default:
-        return null;
-    }
-  }
-
   render() {
-    const { item, itemType, isDragging, offset, zoomFactor } = this.props;
+    const { item, isDragging, offset, zoomFactor } = this.props;
 
     if (!isDragging || !offset) {
       return null;
     }
-    const x = offset.x / zoomFactor + item.config.x;
-    const y = offset.y / zoomFactor + item.config.y;
+    const x = offset.x / zoomFactor;
+    const y = offset.y / zoomFactor;
     const transform = `translate(${x}, ${y})`;
     return (
       <g transform={transform}>
-        {this.renderItem(itemType, item)}
+        {this.renderComponent(item.config)}
+      </g>
+    );
+  }
+
+
+  renderComponent(component) {
+    if (component.type === '__Group__') {
+      return component.children.map((c) => this.renderComponent(c));
+    }
+
+    const ComponentClass = components[component.type];
+    const transform = `translate(${component.x}, ${component.y})`;
+
+    return (
+      <g key={component.id} transform={transform}>
+        <ComponentClass {...component} />
       </g>
     );
   }
@@ -50,7 +50,6 @@ class CustomDragLayer extends Component {
 
 const DLDecorator = DragLayer(monitor => ({
   item: monitor.getItem(),
-  itemType: monitor.getItemType(),
   offset: monitor.getDifferenceFromInitialOffset(),
   isDragging: monitor.isDragging()
 }));
