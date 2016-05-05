@@ -145,7 +145,7 @@ class ComponentWrapper extends Component {
 const componentSource = {
   beginDrag(props) {
     const { id, component } = props;
-    return { id, component, left: component.x, top: component.y };
+    return { id, component, x: component.x, y: component.y };
   }
 };
 

@@ -79,13 +79,13 @@ class ComponentsContainer extends Component {
 
 
 const componentsTarget = {
-  drop(props, monitor, component) {
+  drop(props, monitor) {
     const item = monitor.getItem();
     const delta = monitor.getDifferenceFromInitialOffset();
-    const left = Math.round(item.left + delta.x / props.zoomFactor);
-    const top = Math.round(item.top + delta.y / props.zoomFactor);
+    const x = Math.round(item.x + delta.x / props.zoomFactor);
+    const y = Math.round(item.y + delta.y / props.zoomFactor);
 
-    props.onComponentMoved(item.id, left, top);
+    props.onComponentMoved(item.id, x, y);
   }
 };
 
