@@ -1,6 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { DragLayer } from 'react-dnd';
-import * as components from '../../../mockup-components';
+import { getPossibleAlignments, applyAlignments } from '../../../util/alignement';
+import * as mockupComponents from '../../../mockup-components';
+
+const alignerStyle = {
+  stroke: 'black',
+  strokeWidth: 1
+};
 
 class CustomDragLayer extends Component {
   static propTypes = {
@@ -11,21 +17,28 @@ class CustomDragLayer extends Component {
       y: PropTypes.number.isRequired
     }),
     isDragging: PropTypes.bool.isRequired,
-    zoomFactor: PropTypes.number.isRequired
+    zoomFactor: PropTypes.number.isRequired,
+    components: PropTypes.array
   };
 
   render() {
-    const { item, isDragging, offset, zoomFactor } = this.props;
+    const { item, isDragging, components, offset, zoomFactor } = this.props;
 
     if (!isDragging || !offset) {
       return null;
     }
-    const x = offset.x / zoomFactor;
-    const y = offset.y / zoomFactor;
-    const transform = `translate(${x}, ${y})`;
+
+    let offsetX = offset.x / zoomFactor;
+    let offsetY = offset.y / zoomFactor;
+    const alignments = getPossibleAlignments(offsetX, offsetY, item.component, components);
+    ({ offsetX, offsetY } = applyAlignments(offsetX, offsetY, alignments, item.component));
+    const transform = `translate(${offsetX},${offsetY})`;
     return (
-      <g transform={transform}>
-        {this.renderComponent(item.component)}
+      <g>
+        {this.renderAligners(alignments)}
+        <g transform={transform}>
+          {this.renderComponent(item.component)}
+        </g>
       </g>
     );
   }
@@ -36,7 +49,7 @@ class CustomDragLayer extends Component {
       return component.children.map((c) => this.renderComponent(c));
     }
 
-    const ComponentClass = components[component.type];
+    const ComponentClass = mockupComponents[component.type];
     const transform = `translate(${component.x}, ${component.y})`;
 
     return (
@@ -45,6 +58,18 @@ class CustomDragLayer extends Component {
       </g>
     );
   }
+
+  renderAligners(alignments) {
+    const aligners = [];
+    if (alignments.x) {
+      aligners.push(<line x1={alignments.x} y1={0} x2={alignments.x} y2={5000} style={alignerStyle} />);
+    }
+    if (alignments.y) {
+      aligners.push(<line x1={0} y1={alignments.y} x2={5000} y2={alignments.y} style={alignerStyle} />);
+    }
+    return aligners;
+  }
+
 }
 
 

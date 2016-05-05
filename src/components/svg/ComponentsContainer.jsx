@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
+import { DropTarget } from 'react-dnd';
 import ComponentWrapper from './ComponentWrapper.jsx';
 import GroupWrapper from './GroupWrapper.jsx';
-import { DropTarget } from 'react-dnd';
+import { getPossibleAlignments, applyAlignments } from '../../util/alignement';
 
 
 class ComponentsContainer extends Component {
@@ -82,9 +83,14 @@ const componentsTarget = {
   drop(props, monitor) {
     const item = monitor.getItem();
     const delta = monitor.getDifferenceFromInitialOffset();
-    const x = Math.round(item.x + delta.x / props.zoomFactor);
-    const y = Math.round(item.y + delta.y / props.zoomFactor);
+    let offsetX = delta.x / props.zoomFactor;
+    let offsetY = delta.y / props.zoomFactor;
 
+    const alignments = getPossibleAlignments(offsetX, offsetY, item.component, props.components);
+    ({ offsetX, offsetY } = applyAlignments(offsetX, offsetY, alignments, item.component));
+
+    const x = Math.round(item.x + offsetX);
+    const y = Math.round(item.y + offsetY);
     props.onComponentMoved(item.id, x, y);
   }
 };

@@ -23,10 +23,10 @@
  - enter group
  - non-box components (arrows)
  - cut/copy/paste
- - alignment
  - skins
  - grid
  - reuse group as custom component
+ - alignment during resize
 
 ## Could have
  - transformations?
