@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonGroup } from 'react-bootstrap';
+import MockupPreview from './svg/MockupPreview.jsx';
 
 import { Icon } from './helpers.jsx';
 
@@ -29,7 +30,8 @@ export default class MockupSelector extends Component {
               onClick={() => onMockupClicked(i)}
               onDoubleClick={() => onMockupDoubleClicked(i)}
             >
-              {m.name}
+              <MockupPreview width={120} height={90} components={mockups[i].components} />
+              <div>{m.name}</div>
             </Button>
 
           )
