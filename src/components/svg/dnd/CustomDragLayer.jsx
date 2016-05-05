@@ -25,7 +25,7 @@ class CustomDragLayer extends Component {
     const transform = `translate(${x}, ${y})`;
     return (
       <g transform={transform}>
-        {this.renderComponent(item.config)}
+        {this.renderComponent(item.component)}
       </g>
     );
   }

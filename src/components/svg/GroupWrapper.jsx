@@ -4,12 +4,6 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 
 import * as components from '../../mockup-components';
 
-const boxSource = {
-  beginDrag(props) {
-    const { id, config } = props;
-    return { id, config, left: config.x, top: config.y };
-  }
-};
 
 function getStyles(props) {
   const { isDragging } = props;
@@ -28,7 +22,7 @@ class GroupWrapper extends Component {
     isDragging: PropTypes.bool.isRequired,
 
     id: PropTypes.any.isRequired,
-    config: PropTypes.object.isRequired,
+    component: PropTypes.object.isRequired,
     selected: PropTypes.bool.isRequired,
     onMouseDown: PropTypes.func.isRequired
   };
@@ -52,7 +46,7 @@ class GroupWrapper extends Component {
   render() {
     const { // list all props to remove from otherProps
       connectDragSource,
-      config,
+      component,
       onMouseDown
     } = this.props;
 
@@ -61,11 +55,11 @@ class GroupWrapper extends Component {
         style={getStyles(this.props)}
         onMouseDown={onMouseDown}
       >
-        {this.renderChildComponents(config.children)}
+        {this.renderChildComponents(component.children)}
       </g>
     );
 
-    if (!config.locked) {
+    if (!component.locked) {
       group = connectDragSource(group);
     }
 
@@ -108,7 +102,14 @@ class GroupWrapper extends Component {
 
 }
 
-export default DragSource('mockup-group', boxSource, (connect, monitor) => ({
+const groupSource = {
+  beginDrag(props) {
+    const { id, component } = props;
+    return { id, component, left: component.x, top: component.y };
+  }
+};
+
+export default DragSource('mockup-group', groupSource, (connect, monitor) => ({
   // injected props
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),

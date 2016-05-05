@@ -57,7 +57,7 @@ class ComponentsContainer extends Component {
       const props = {
         key: id,
         id: id,
-        config: c,
+        component: c,
         selected: this.props.selection.includes(id),
         onMouseDown: (ev) => {
           this.props.onComponentMouseDown(id, ev);
@@ -78,7 +78,7 @@ class ComponentsContainer extends Component {
 }
 
 
-const boxTarget = {
+const componentsTarget = {
   drop(props, monitor, component) {
     const item = monitor.getItem();
     const delta = monitor.getDifferenceFromInitialOffset();
@@ -89,7 +89,7 @@ const boxTarget = {
   }
 };
 
-const DropTargetDecorator = DropTarget(['mockup-component', 'mockup-group'], boxTarget, connect => ({
+const DropTargetDecorator = DropTarget(['mockup-component', 'mockup-group'], componentsTarget, connect => ({
   // injected props
   connectDropTarget: connect.dropTarget()
 }));

@@ -27,7 +27,7 @@ class Workspace extends React.Component {
       <svg height="100%" width="100%">
         <PanZoom zoomSpeed={0.2} panHandle=".background" onZoom={this.onZoom}>
           <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
-          <CustomDragLayer  zoomFactor={zoomFactor} />
+          <CustomDragLayer zoomFactor={zoomFactor} />
         </PanZoom>
       </svg>
     );

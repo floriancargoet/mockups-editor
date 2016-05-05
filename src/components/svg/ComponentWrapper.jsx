@@ -6,12 +6,6 @@ import classnames from 'classnames';
 import Resizable from './Resizable.jsx';
 import * as components from '../../mockup-components';
 
-const boxSource = {
-  beginDrag(props) {
-    const { id, config } = props;
-    return { id, config, left: config.x, top: config.y };
-  }
-};
 
 function getStyles(props) {
   const { isDragging } = props;
@@ -31,7 +25,7 @@ class ComponentWrapper extends Component {
     isDragging: PropTypes.bool.isRequired,
 
     id: PropTypes.any.isRequired,
-    config: PropTypes.object.isRequired,
+    component: PropTypes.object.isRequired,
     selected: PropTypes.bool.isRequired,
     onResize: PropTypes.func.isRequired,
     onMouseDown: PropTypes.func.isRequired,
@@ -41,15 +35,15 @@ class ComponentWrapper extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: props.config.width, height: props.config.height,
-      x: props.config.x, y: props.config.y
+      width: props.component.width, height: props.component.height,
+      x: props.component.x, y: props.component.y
     };
   }
 
-  componentWillReceiveProps({ config }) {
+  componentWillReceiveProps({ component }) {
     this.setState({
-      width: config.width, height: config.height,
-      x: config.x, y: config.y
+      width: component.width, height: component.height,
+      x: component.x, y: component.y
     });
   }
 
@@ -66,7 +60,7 @@ class ComponentWrapper extends Component {
   render() {
     const { // list all props to remove from otherProps
       connectDragSource,
-      config,
+      component,
       selected,
       zoomFactor,
       isDragging,
@@ -74,37 +68,37 @@ class ComponentWrapper extends Component {
     } = this.props;
     const { x, y, width, height, resizing } = this.state;
 
-    const MockupComponent = components[config.type];
-    let component = <MockupComponent {...config} width={width} height={height} />;
+    const MockupComponent = components[component.type];
+    let renderedComponent = <MockupComponent {...component} width={width} height={height} />;
     const classNames = classnames({
       'mockup-component-wrapper': true,
       'mockup-component-wrapper_resizing': resizing,
       'mockup-component-wrapper_selected': selected
     });
 
-    component = (
+    renderedComponent = (
       <g
         onMouseDown={onMouseDown}
         className={classNames}
         style={getStyles(this.props)}
       >
         {this.renderBackground()}
-        {component}
+        {renderedComponent}
       </g>
     );
 
-    if (!config.locked) {
-      component = connectDragSource(component);
+    if (!component.locked) {
+      renderedComponent = connectDragSource(renderedComponent);
     }
     // resizing constraints
-    const resize = config.resize || 'both';
+    const resize = component.resize || 'both';
 
     return (
       <Resizable
         x={x} y={y}
         width={width} height={height}
         showBorder={selected && !isDragging}
-        showHandles={selected && !isDragging && !config.locked}
+        showHandles={selected && !isDragging && !component.locked}
         vertical={resize === 'both' || resize === 'vertical'}
         horizontal={resize === 'both' || resize === 'horizontal'}
         zoomFactor={zoomFactor} // to keep an un-zoomed appearence
@@ -112,7 +106,7 @@ class ComponentWrapper extends Component {
         onResize={this.onResize}
         onResizeStop={this.onResizeStop}
       >
-        {component}
+        {renderedComponent}
       </Resizable>
     );
   }
@@ -147,7 +141,15 @@ class ComponentWrapper extends Component {
 
 }
 
-export default DragSource('mockup-component', boxSource, (connect, monitor) => ({
+
+const componentSource = {
+  beginDrag(props) {
+    const { id, component } = props;
+    return { id, component, left: component.x, top: component.y };
+  }
+};
+
+export default DragSource('mockup-component', componentSource, (connect, monitor) => ({
   // injected props
   connectDragSource: connect.dragSource(),
   connectDragPreview: connect.dragPreview(),
