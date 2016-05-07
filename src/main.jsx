@@ -9,10 +9,11 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 // App
-import { addComponent, addMockup, selectMockup, renameMockup } from './actions';
+import * as UndoActions from './actions/UndoActions';
+import { addComponent, selectMockup, renameMockup } from './actions';
 import rootReducer from './reducers';
 // UI Root
-import Editor from './containers/Editor';
+import Editor from './components/Editor.jsx';
 
 import * as components from './mockup-components';
 
@@ -23,11 +24,11 @@ const store = createStore(
   applyMiddleware(thunk, logger)
 );
 
-store.dispatch(addMockup());
 store.dispatch(selectMockup(0));
 store.dispatch(renameMockup('Mockup #1'));
 
 
+store.dispatch(UndoActions.save('Add examples'));
 let x = 50, y = 50;
 const width = 150, height = 150;
 Object.keys(components).forEach(type => {

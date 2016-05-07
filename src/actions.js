@@ -22,6 +22,11 @@ export const SELECT_MOCKUP = 'SELECT_MOCKUP';
 export const RENAME_MOCKUP = 'RENAME_MOCKUP';
 
 
+// use this wrapper to inject a mockupIndex in the action object
+export function onMockup(mockupIndex, action) {
+  return { ...action, mockupIndex };
+}
+
 export function moveComponent(id, x, y) {
   return { type: MOVE_COMPONENT, id, x, y };
 }

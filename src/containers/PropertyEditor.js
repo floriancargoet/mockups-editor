@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import * as UndoActions from '../actions/UndoActions';
 import { updateComponentProperty, updateComponentRootProperty } from '../actions';
 
 import PropertyEditor from '../components/PropertyEditor.jsx';
@@ -16,9 +17,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onRootPropertyChange(component, prop, value) {
+      dispatch(UndoActions.save('Change ' + prop));
       dispatch(updateComponentRootProperty(component.id, prop, value));
     },
     onPropertyChange(component, prop, value) {
+      dispatch(UndoActions.save('Change ' + prop));
       dispatch(updateComponentProperty(component.id, prop, value));
     }
   };

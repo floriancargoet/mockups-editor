@@ -10,14 +10,14 @@ export default class MockupSelector extends Component {
     mockups: PropTypes.array.isRequired,
     currentMockup: PropTypes.number.isRequired,
     onMockupClicked: PropTypes.func.isRequired,
-    onMockupDoubleClicked: PropTypes.func.isRequired,
+    onMockupNameClicked: PropTypes.func.isRequired,
     onAddClicked: PropTypes.func.isRequired
   }
 
   render() {
     const {
       mockups, currentMockup,
-      onMockupClicked, onMockupDoubleClicked, onAddClicked
+      onMockupClicked, onMockupNameClicked, onAddClicked
     } = this.props;
 
     return (
@@ -28,10 +28,13 @@ export default class MockupSelector extends Component {
             <Button
               key={i} active={i === currentMockup}
               onClick={() => onMockupClicked(i)}
-              onDoubleClick={() => onMockupDoubleClicked(i)}
             >
               <MockupPreview width={120} height={90} components={mockups[i].components} />
-              <div>{m.name}</div>
+              <a title="Rename" style={{ display: 'block' }} onClick={(ev) => {
+                ev.stopPropagation(); onMockupNameClicked(i);
+              }}>
+                {m.name}
+              </a>
             </Button>
 
           )

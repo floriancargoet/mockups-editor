@@ -1,9 +1,11 @@
 import update from 'react/lib/update';
 import { combineReducers } from 'redux';
-import undoable from 'redux-undo';
+import undoable, { includeAction } from 'redux-undo';
 import * as utils from './reducers-utils';
 import getID from './util/id';
 import * as mockupComponents from './mockup-components';
+
+import * as UndoActions from './actions/UndoActions';
 
 import {
   MOVE_COMPONENT, RESIZE_COMPONENT, ADD_COMPONENT, UPDATE_COMPONENT_PROPERTY,
@@ -400,13 +402,15 @@ function rootReducer(state, action) {
   // Initial root state
   if (!state) {
     state = {
-      currentMockup: 0,
+      undoableActionName: '',
+      currentMockup: 0, // use 0 as initial index to create a empty mockup
       mockups: []
     };
   }
 
   // Root props reducers
   state = {
+    undoableActionName: state.undoableActionName,
     currentMockup: currentMockup(state.currentMockup, action),
     mockups: mockups(state.mockups, action)
   };
@@ -424,13 +428,24 @@ function rootReducer(state, action) {
           $set: index
         }
       });
+      break;
+    }
+
+    case UndoActions.NAME_STATE: {
+      state = update(state, {
+        undoableActionName: {
+          $set: action.name
+        }
+      });
+      break;
     }
   }
 
-  // delegate to mockup reducer but only on the current mockup
+  // delegate to the mockup reducer, for the specified or current mockup
+  const mockupIndex = 'mockupIndex' in action ? action.mockupIndex : state.currentMockup;
   return update(state, {
     mockups: {
-      [state.currentMockup]: {
+      [mockupIndex]: {
         $apply: m => mockup(m, action)
       }
     }
@@ -438,5 +453,9 @@ function rootReducer(state, action) {
 }
 
 export default undoable(rootReducer, {
-  limit: 100
+  limit: 100,
+  filter: includeAction(UndoActions.SAVE),
+  undoType: UndoActions.UNDO,
+  redoType: UndoActions.REDO,
+  jumpType: UndoActions.JUMP
 });
