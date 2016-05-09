@@ -1,7 +1,17 @@
 import React, { PropTypes } from 'react';
 import * as editors from './property-editors';
 
-const PropertyField = ({ id, label, value, type, readOnly, onChange }) => {
+function getEditor(editor) {
+  if (typeof editor === "string") {
+    return { type: editor };
+  }
+  return editor;
+}
+
+
+const PropertyField = ({ id, label, value, editor, readOnly, onChange }) => {
+  editor = getEditor(editor);
+  const { type, ...config } = editor;
   switch (type) {
     case undefined:
       return (
@@ -15,14 +25,17 @@ const PropertyField = ({ id, label, value, type, readOnly, onChange }) => {
       );
     default:
       const Editor = editors[type];
-      return <Editor id={id} label={label} value={value} readOnly={readOnly} onChange={onChange} />;
+      return <Editor {...config} id={id} label={label} value={value} readOnly={readOnly} onChange={onChange} />;
   }
 };
 
 PropertyField.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  editor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   value: PropTypes.any.isRequired,
   readOnly: PropTypes.bool,
   onChange: PropTypes.func

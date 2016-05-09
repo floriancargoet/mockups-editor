@@ -4,7 +4,7 @@ import { Form, Button, Grid } from 'react-bootstrap';
 import PropertyField from './PropertyField.jsx';
 import * as components from '../mockup-components';
 
-function getEditorType(component, prop) {
+function getEditor(component, prop) {
   const MockupComponent = components[component.type];
   if (MockupComponent && MockupComponent.editors && MockupComponent.editors[prop]) {
     return MockupComponent.editors[prop];
@@ -56,7 +56,7 @@ class PropertyEditor extends Component {
               rootPropsEditors.map(({ prop, editor }) => (
                 <PropertyField
                   key={prop} id={prop} label={prop}
-                  type={editor}
+                  editor={editor}
                   value={component[prop]}
                   readOnly={(component.locked && prop !== 'locked') || (widthRO && prop === 'width') || (heightRO && prop === 'height') }
                   onChange={value => onRootPropertyChange(component, prop, value)}
@@ -67,7 +67,7 @@ class PropertyEditor extends Component {
               Object.keys(component.properties).map(prop => (
                 <PropertyField
                   key={prop} id={prop} label={prop}
-                  type={getEditorType(component, prop)}
+                  editor={getEditor(component, prop)}
                   value={component.properties[prop]}
                   readOnly={component.locked}
                   onChange={value => onPropertyChange(component, prop, value)}
