@@ -8,7 +8,7 @@
    - on/off, icon button
    - radio, select, datepicker, fieldset
    - label, line (auto width), list, link, breadcrumbs
-   - shapes, scrollbars, hr, vr, splitters, sliders, progress
+   - shapes, hr, vr, splitters, sliders
    - tabs, window, accordion
    - data grid, menu, searchbox
  - better components
