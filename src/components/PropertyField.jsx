@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import * as editors from './property-editors';
 
 function getEditor(editor) {
-  if (typeof editor === "string") {
+  if (typeof editor === 'string') {
     return { type: editor };
   }
   return editor;
@@ -34,7 +34,7 @@ PropertyField.propTypes = {
   label: PropTypes.string.isRequired,
   editor: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.number
+    PropTypes.object
   ]),
   value: PropTypes.any.isRequired,
   readOnly: PropTypes.bool,
