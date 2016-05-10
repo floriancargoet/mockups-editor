@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import classnames from 'classnames';
+import shouldPureComponentUpdate from '../../util/shouldPureComponentUpdate';
 
 import Resizable from './Resizable.jsx';
 import * as components from '../../mockup-components';
@@ -40,6 +41,8 @@ class ComponentWrapper extends Component {
     };
   }
 
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
   componentWillReceiveProps({ component }) {
     this.setState({
       width: component.width, height: component.height,
@@ -58,13 +61,12 @@ class ComponentWrapper extends Component {
   }
 
   render() {
-    const { // list all props to remove from otherProps
+    const {
       connectDragSource,
       component,
       selected,
       zoomFactor,
-      isDragging,
-      onMouseDown
+      isDragging
     } = this.props;
     const { x, y, width, height, resizing } = this.state;
 
@@ -78,7 +80,7 @@ class ComponentWrapper extends Component {
 
     renderedComponent = (
       <g
-        onMouseDown={onMouseDown}
+        onMouseDown={(ev) => this.props.onMouseDown(component.id, ev)}
         className={classNames}
         style={getStyles(this.props)}
       >
@@ -121,7 +123,6 @@ class ComponentWrapper extends Component {
     );
   }
 
-
   onResizeStart = () => {
     this.setState({
       resizing: true
@@ -136,7 +137,7 @@ class ComponentWrapper extends Component {
     this.setState({
       resizing: false
     });
-    this.props.onResize(size);
+    this.props.onResize(this.props.component.id, size);
   }
 
 }

@@ -60,17 +60,19 @@ class ComponentsContainer extends Component {
         id: id,
         component: c,
         selected: this.props.selection.includes(id),
-        onMouseDown: (ev) => {
-          this.props.onComponentMouseDown(id, ev);
-        }
+        onMouseDown: this.onMouseDown
       };
       return c.type === '__Group__'
         ? <GroupWrapper {...props} />
         : <ComponentWrapper {...props}
-            onResize={(size) => this.onResize(id, size)}
+            onResize={this.onResize}
             zoomFactor={this.props.zoomFactor}
           />;
     });
+  }
+
+  onMouseDown = (id, ev) => {
+    this.props.onComponentMouseDown(id, ev);
   }
 
   onResize = (id, size) => {
