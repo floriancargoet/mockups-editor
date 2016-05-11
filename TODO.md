@@ -10,7 +10,6 @@
    - data grid, menu, searchbox
  - better components
    - tooltip direction
-   - markdown text
 
 ## Should have
  - multiple mockups

@@ -9,6 +9,7 @@ const Text = ({ width, height, properties }) => {
       <ForeignText
         x={0} y={0} width={width} height={height}
         hAlign={properties.hAlign} vAlign={properties.vAlign}
+        markdown
         style={{ fontSize: properties.fontSize }}
       >
         {properties.text}
