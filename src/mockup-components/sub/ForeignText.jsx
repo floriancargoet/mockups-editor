@@ -43,7 +43,7 @@ export default class ForeignText extends Component {
 
     let textComponent = text || children;
     if (markdown) {
-      textComponent = (<Markdown source={textComponent}/>);
+      textComponent = (<Markdown disableLinks source={textComponent}/>);
     }
 
     return (
