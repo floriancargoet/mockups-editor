@@ -1,6 +1,3 @@
-## Bugs
- - group selection
-
 ## Must have
  - selection dnd
  - property editor (Range, TextArea, Select)

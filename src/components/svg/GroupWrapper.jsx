@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import shouldPureComponentUpdate from '../../util/shouldPureComponentUpdate';
 
 import * as components from '../../mockup-components';
 
@@ -33,6 +34,8 @@ class GroupWrapper extends Component {
     };
   }
 
+  shouldComponentUpdate = shouldPureComponentUpdate;
+
   componentDidMount() {
     // Use empty image as a drag preview so browsers don't draw it
     // and we can draw whatever we want on the custom drag layer instead.
@@ -44,16 +47,15 @@ class GroupWrapper extends Component {
   }
 
   render() {
-    const { // list all props to remove from otherProps
+    const {
       connectDragSource,
-      component,
-      onMouseDown
+      component
     } = this.props;
 
     let group = (
       <g
         style={getStyles(this.props)}
-        onMouseDown={onMouseDown}
+        onMouseDown={(ev) => this.props.onMouseDown(component.id, ev)}
       >
         {this.renderChildComponents(component.children)}
       </g>
