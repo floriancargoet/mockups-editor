@@ -34,7 +34,7 @@ TextArea.propTypes = {
 
 TextArea.editors = {
   backgroundColor: 'Color',
-  value: 'String',
+  value: 'InPlace',
   fontSize: 'Number',
   strokeWidth: 'Number'
 };

@@ -3,7 +3,7 @@ import { Layout, Fixed, Flex } from 'react-layout-pane';
 
 import Toolbar from '../connectors/Toolbar';
 import MockupSelector from '../connectors/MockupSelector';
-import Workspace from './svg/Workspace.jsx';
+import Workspace from '../connectors/svg/Workspace';
 import PropertyEditor from '../connectors/PropertyEditor';
 
 export default class Editor extends React.Component {

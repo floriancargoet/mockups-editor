@@ -9,8 +9,8 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 // App
-import * as UndoActions from './actions/UndoActions';
-import { addComponent, selectMockup, renameMockup } from './actions';
+import * as UndoActions from './actions/low-level/UndoActions';
+import { addComponent, selectMockup, renameMockup } from './actions/low-level/actions';
 import rootReducer from './reducers';
 // UI Root
 import Editor from './components/Editor.jsx';

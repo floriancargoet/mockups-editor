@@ -4,6 +4,7 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import classnames from 'classnames';
 import shouldPureComponentUpdate from '../../util/shouldPureComponentUpdate';
 
+import InPlaceEditor from '../property-editors/InPlace.jsx';
 import Resizable from './Resizable.jsx';
 import * as components from '../../mockup-components';
 
@@ -30,6 +31,7 @@ class ComponentWrapper extends Component {
     selected: PropTypes.bool.isRequired,
     onResize: PropTypes.func.isRequired,
     onMouseDown: PropTypes.func.isRequired,
+    onDoubleClick: PropTypes.func.isRequired,
     zoomFactor: PropTypes.number.isRequired
   };
 
@@ -81,6 +83,7 @@ class ComponentWrapper extends Component {
     renderedComponent = (
       <g
         onMouseDown={(ev) => this.props.onMouseDown(component.id, ev)}
+        onDoubleClick={(ev) => this.props.onDoubleClick(component.id, ev)}
         className={classNames}
         style={getStyles(this.props)}
       >

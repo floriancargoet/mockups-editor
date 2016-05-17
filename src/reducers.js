@@ -5,7 +5,7 @@ import * as utils from './reducers-utils';
 import getID from './util/id';
 import * as mockupComponents from './mockup-components';
 
-import * as UndoActions from './actions/UndoActions';
+import * as UndoActions from './actions/low-level/UndoActions';
 
 import {
   MOVE_COMPONENT, RESIZE_COMPONENT, ADD_COMPONENT, UPDATE_COMPONENT_PROPERTY,
@@ -14,8 +14,8 @@ import {
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
   Z_MOVE_SELECTION, DUPLICATE_SELECTION,
 
-  ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP
-} from './actions';
+  ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP, SET_IN_PLACE_EDITOR
+} from './actions/low-level/actions';
 
 
 function cascadeUpdateChildren(item, cb) {
@@ -72,6 +72,7 @@ function callRootPropertyUpdater(component, property, value) {
   currentMockup: index,
   mockups: [{
     name: "",
+    inPlaceEdit: id,
     components: [component...],
     last: id,
     selection: [id, ...]
@@ -86,6 +87,18 @@ function name(state = 'Untitled', action) {
     default:
       return state;
   }
+}
+
+function inPlaceEdit(state = null, action) {
+
+  switch (action.type) {
+    case SET_IN_PLACE_EDITOR: {
+      return action.id;
+    }
+    default:
+      return state;
+  }
+
 }
 
 function components(state = [], action) {
@@ -369,6 +382,7 @@ function fullMockup(state = {}, action) {
 
 const combinedMockup = combineReducers({
   name,
+  inPlaceEdit,
   components,
   selection,
   last

@@ -16,9 +16,11 @@ class ComponentsContainer extends Component {
     components: PropTypes.array.isRequired,
     selection: PropTypes.array.isRequired,
     onBackgroundClicked: PropTypes.func.isRequired,
+
     onComponentResized: PropTypes.func.isRequired,
     onComponentMoved: PropTypes.func.isRequired,
-    onComponentMouseDown: PropTypes.func.isRequired
+    onComponentMouseDown: PropTypes.func.isRequired,
+    onComponentDoubleClick: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -60,7 +62,8 @@ class ComponentsContainer extends Component {
         id: id,
         component: c,
         selected: this.props.selection.includes(id),
-        onMouseDown: this.onMouseDown
+        onMouseDown: this.onMouseDown,
+        onDoubleClick: this.onDoubleClick
       };
       return c.type === '__Group__'
         ? <GroupWrapper {...props} />
@@ -72,11 +75,18 @@ class ComponentsContainer extends Component {
   }
 
   onMouseDown = (id, ev) => {
-    this.props.onComponentMouseDown(id, ev);
+    const component = this.props.components.find(c => c.id === id);
+    this.props.onComponentMouseDown(component, ev);
+  }
+
+  onDoubleClick = (id, ev) => {
+    const component = this.props.components.find(c => c.id === id);
+    this.props.onComponentDoubleClick(component, ev);
   }
 
   onResize = (id, size) => {
-    this.props.onComponentResized(id, size);
+    const component = this.props.components.find(c => c.id === id);
+    this.props.onComponentResized(component, size);
   }
 }
 
@@ -93,7 +103,7 @@ const componentsTarget = {
 
     const x = Math.round(item.x + offsetX);
     const y = Math.round(item.y + offsetY);
-    props.onComponentMoved(item.id, x, y);
+    props.onComponentMoved(item.component, x, y);
   }
 };
 

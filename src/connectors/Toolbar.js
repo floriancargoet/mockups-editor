@@ -1,10 +1,13 @@
 import { connect } from 'react-redux';
-import * as UndoActions from '../actions/UndoActions';
+import * as UndoActions from '../actions/low-level/UndoActions';
+
 import {
-  addComponent, selectLastComponent, deleteSelection,
-  groupSelection, ungroupSelection, zMoveSelection,
-  duplicateSelection
-} from '../actions';
+  createComponent,
+  deleteSelection, duplicateSelection,
+  groupSelection, ungroupSelection,
+  bringUpSelection, bringTopSelection,
+  pushDownSelection, pushBottomSelection
+} from '../actions/high-level/actions';
 
 import Toolbar from '../components/Toolbar.jsx';
 
@@ -55,49 +58,39 @@ const mapDispatchToProps = (dispatch) => {
 
 
         case 'create':
-          dispatch(UndoActions.save('Create component'));
-          dispatch(addComponent(args[0].create()));
-          dispatch(selectLastComponent());
+          dispatch(createComponent(args[0].create()));
           break;
 
         case 'delete':
-          dispatch(UndoActions.save('Delete component'));
           dispatch(deleteSelection());
           break;
 
         case 'duplicate':
-          dispatch(UndoActions.save('Duplicate component'));
           dispatch(duplicateSelection());
           break;
 
         case 'group':
-          dispatch(UndoActions.save('Group selection'));
           dispatch(groupSelection());
           break;
 
         case 'ungroup':
-          dispatch(UndoActions.save('Ungroup selection'));
           dispatch(ungroupSelection());
           break;
 
         case 'bring-up':
-          dispatch(UndoActions.save('Bring selection up'));
-          dispatch(zMoveSelection('up'));
+          dispatch(bringUpSelection());
           break;
 
         case 'bring-to-top':
-          dispatch(UndoActions.save('Bring selection to top'));
-          dispatch(zMoveSelection('top'));
+          dispatch(bringTopSelection());
           break;
 
         case 'push-down':
-          dispatch(UndoActions.save('Push selection down'));
-          dispatch(zMoveSelection('down'));
+          dispatch(pushDownSelection());
           break;
 
         case 'push-to-bottom':
-          dispatch(UndoActions.save('Push selection to bottom'));
-          dispatch(zMoveSelection('bottom'));
+          dispatch(pushBottomSelection());
           break;
       }
     }

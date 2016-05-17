@@ -1,16 +1,17 @@
 import { connect } from 'react-redux';
-import * as UndoActions from '../../actions/UndoActions';
 import {
   resizeComponent, moveComponent,
-  selectOneComponent, selectComponent,
-  clearSelection
-} from '../../actions';
+  addComponentToSelection, selectComponent,
+  clearSelection,
+  showInPlaceEditor
+} from '../../actions/high-level/actions';
 
 import ComponentsContainer from '../../components/svg/ComponentsContainer.jsx';
 
 const mapStateToProps = (state) => {
   const index = state.present.currentMockup;
   const mockup = state.present.mockups[index];
+
   return {
     components: mockup.components,
     selection: mockup.selection
@@ -19,31 +20,32 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onComponentResized: (id, { x, y, width, height }) => {
-      dispatch(UndoActions.save('Resize component'));
-      dispatch(moveComponent(id, x, y));
-      dispatch(resizeComponent(id, width, height));
-      dispatch(selectOneComponent(id));
+
+    onComponentResized: (component, sizeInfo) => {
+      dispatch(resizeComponent(component, sizeInfo));
     },
-    onComponentMoved: (id, x, y) => {
-      dispatch(UndoActions.save('Move component'));
-      dispatch(moveComponent(id, x, y));
-      dispatch(selectOneComponent(id));
+
+    onComponentMoved: (component, x, y) => {
+      dispatch(moveComponent(component, x, y));
     },
-    onComponentMouseDown: (id, ev) => {
+
+    onComponentMouseDown: (component, ev) => {
       if (ev.ctrlKey) {
-        dispatch(UndoActions.save('Add component to selection'));
-        dispatch(selectComponent(id));
+        dispatch(addComponentToSelection(component));
       }
       else {
-        dispatch(UndoActions.save('Select component'));
-        dispatch(selectOneComponent(id));
+        dispatch(selectComponent(component));
       }
     },
+
+    onComponentDoubleClick: (component, ev) => {
+      dispatch(showInPlaceEditor(component));
+    },
+
     onBackgroundClicked: () => {
-      dispatch(UndoActions.save('Clear selection'));
       dispatch(clearSelection());
     }
+
   };
 };
 

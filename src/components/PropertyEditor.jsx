@@ -64,15 +64,21 @@ class PropertyEditor extends Component {
               ))
             }
             {
-              Object.keys(component.properties).map(prop => (
-                <PropertyField
-                  key={prop} id={prop} label={prop}
-                  editor={getEditor(component, prop)}
-                  value={component.properties[prop]}
-                  readOnly={component.locked}
-                  onChange={value => onPropertyChange(component, prop, value)}
-                />
-              ))
+              Object.keys(component.properties).map(prop => {
+                const editor = getEditor(component, prop);
+                if (editor === 'InPlace' || editor.type === 'InPlace') {
+                  return;
+                }
+                return (
+                  <PropertyField
+                    key={prop} id={prop} label={prop}
+                    editor={editor}
+                    value={component.properties[prop]}
+                    readOnly={component.locked}
+                    onChange={value => onPropertyChange(component, prop, value)}
+                  />
+                );
+              })
             }
             <Button onClick={this.onDebugClick}>Debug Info</Button>
             {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import { DragDropContext } from 'react-dnd';
@@ -6,11 +6,16 @@ import { DragDropContext } from 'react-dnd';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
 import CustomDragLayer from '../../connectors/svg/dnd/CustomDragLayer';
 import PanZoom from './PanZoom.jsx';
-
+import InPlaceEditor from '../property-editors/InPlace.jsx';
 import ComponentsContainer from '../../connectors/svg/ComponentsContainer';
 
 
-class Workspace extends React.Component {
+class Workspace extends Component {
+
+  static propTypes = {
+    componentToEditInPlace: PropTypes.object,
+    onInPlacePropertyChange: PropTypes.func.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -23,12 +28,15 @@ class Workspace extends React.Component {
 
   render() {
     const { width, height, zoomFactor } = this.state;
+    const { componentToEditInPlace, onInPlacePropertyChange } = this.props;
+
     return (
       <svg height="100%" width="100%">
         <PanZoom zoomSpeed={0.2} panHandle=".background" onZoom={this.onZoom}>
           <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
           <CustomDragLayer zoomFactor={zoomFactor} />
         </PanZoom>
+        {componentToEditInPlace ? <InPlaceEditor component={componentToEditInPlace} onChange={onInPlacePropertyChange} /> : null}
       </svg>
     );
   }
