@@ -10,10 +10,11 @@
    - data grid, menu, searchbox
  - better components
    - tooltip direction
+ - undo
+   - mockup.ui out of undo
 
 ## Should have
  - multiple mockups
-   - separated panzoom
    - local undo
  - autosize (based on text content)
  - enter group
@@ -26,7 +27,6 @@
 
 ## Could have
  - transformations?
- - in place text editor
  - "infinite" canvas
  - transform to other component
 
