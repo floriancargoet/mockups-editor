@@ -21,7 +21,6 @@ export const ADD_MOCKUP = 'ADD_MOCKUP';
 export const SELECT_MOCKUP = 'SELECT_MOCKUP';
 export const RENAME_MOCKUP = 'RENAME_MOCKUP';
 
-export const SET_IN_PLACE_EDITOR = 'SET_IN_PLACE_EDITOR';
 
 
 export function moveComponent(id, x, y) {
@@ -94,12 +93,4 @@ export function selectMockup(index) {
 export function renameMockup(name) {
   // current mockup
   return { type: RENAME_MOCKUP, name };
-}
-
-export function showInPlaceEditor(id) {
-  return { type: SET_IN_PLACE_EDITOR, id };
-}
-
-export function hideInPlaceEditor() {
-  return { type: SET_IN_PLACE_EDITOR, id: null };
 }

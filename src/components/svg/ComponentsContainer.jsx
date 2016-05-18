@@ -46,7 +46,7 @@ class ComponentsContainer extends Component {
     return (
       <rect
         className="background"
-        onClick={this.props.onBackgroundClicked}
+        onClick={this.onBackgroundClicked}
         x={0} y={0}
         width="100%" height="100%"
         fill="#eee"
@@ -72,6 +72,12 @@ class ComponentsContainer extends Component {
             zoomFactor={this.props.zoomFactor}
           />;
     });
+  }
+
+  onBackgroundClicked = (ev) => {
+    if (ev.button === 0) {
+      this.props.onBackgroundClicked();
+    }
   }
 
   onMouseDown = (id, ev) => {

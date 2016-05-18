@@ -14,8 +14,10 @@ import {
   CLEAR_SELECTION, DELETE_SELECTION, GROUP_SELECTION, UNGROUP_SELECTION,
   Z_MOVE_SELECTION, DUPLICATE_SELECTION,
 
-  ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP, SET_IN_PLACE_EDITOR
+  ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP
 } from './actions/low-level/actions';
+
+import { UI_PAN, UI_ZOOM, UI_PANZOOM_RESET, UI_SET_IN_PLACE_EDITOR } from './actions/low-level/UIActions';
 
 
 function cascadeUpdateChildren(item, cb) {
@@ -72,7 +74,12 @@ function callRootPropertyUpdater(component, property, value) {
   currentMockup: index,
   mockups: [{
     name: "",
-    inPlaceEdit: id,
+    ui: {
+      inPlaceEdit: id,
+      panX: 0,
+      panY: 0,
+      zoomFactor: 1
+    },
     components: [component...],
     last: id,
     selection: [id, ...]
@@ -89,11 +96,27 @@ function name(state = 'Untitled', action) {
   }
 }
 
-function inPlaceEdit(state = null, action) {
-
+function ui(state, action) {
+  if (!state) {
+    state = {
+      inPlaceEdit: null,
+      panX: 0,
+      panY: 0,
+      zoomMatrix: [1, 0, 0, 1, 0, 0]
+    };
+  }
   switch (action.type) {
-    case SET_IN_PLACE_EDITOR: {
-      return action.id;
+    case UI_SET_IN_PLACE_EDITOR: {
+      return { ...state, inPlaceEdit: action.id };
+    }
+    case UI_PAN: {
+      return { ...state, panX: action.x, panY: action.y };
+    }
+    case UI_ZOOM: {
+      return { ...state, zoomMatrix: action.matrix };
+    }
+    case UI_PANZOOM_RESET: {
+      return { ...state, zoomMatrix: [1, 0, 0, 1, 0, 0], panX: 0, panY: 0 };
     }
     default:
       return state;
@@ -382,7 +405,7 @@ function fullMockup(state = {}, action) {
 
 const combinedMockup = combineReducers({
   name,
-  inPlaceEdit,
+  ui,
   components,
   selection,
   last

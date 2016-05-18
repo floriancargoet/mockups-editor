@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import {
   resizeComponent, moveComponent,
   addComponentToSelection, selectComponent,
-  clearSelection,
-  showInPlaceEditor
+  clearSelection
 } from '../../actions/high-level/actions';
+import * as UIActions from '../../actions/high-level/UIActions';
 
 import ComponentsContainer from '../../components/svg/ComponentsContainer.jsx';
 
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch) => {
     },
 
     onComponentDoubleClick: (component, ev) => {
-      dispatch(showInPlaceEditor(component));
+      dispatch(UIActions.showInPlaceEditor(component));
     },
 
     onBackgroundClicked: () => {

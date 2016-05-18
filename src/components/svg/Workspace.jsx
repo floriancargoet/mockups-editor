@@ -14,37 +14,49 @@ class Workspace extends Component {
 
   static propTypes = {
     componentToEditInPlace: PropTypes.object,
-    onInPlacePropertyChange: PropTypes.func.isRequired
+    onInPlacePropertyChange: PropTypes.func.isRequired,
+    zoomMatrix: PropTypes.array.isRequired,
+    panX: PropTypes.number.isRequired,
+    panY: PropTypes.number.isRequired,
+    onPan: PropTypes.func.isRequired,
+    onZoom: PropTypes.func.isRequired,
+    onDoubleMiddleClick: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
       width: 0,
-      height: 0,
-      zoomFactor: 1
+      height: 0
     };
   }
 
   render() {
-    const { width, height, zoomFactor } = this.state;
-    const { componentToEditInPlace, onInPlacePropertyChange } = this.props;
-
+    const { width, height } = this.state;
+    const { zoomMatrix, panX, panY, onZoom, onPan, onDoubleMiddleClick } = this.props;
+    const zoomFactor = zoomMatrix[0];
     return (
       <svg height="100%" width="100%">
-        <PanZoom zoomSpeed={0.2} panHandle=".background" onZoom={this.onZoom}>
+        <PanZoom
+          zoomSpeed={0.2} panHandle=".background"
+          zoomMatrix={zoomMatrix} panX={panX} panY={panY}
+          onZoom={onZoom} onPan={onPan} onDoubleMiddleClick={onDoubleMiddleClick}
+        >
           <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
           <CustomDragLayer zoomFactor={zoomFactor} />
         </PanZoom>
-        {componentToEditInPlace ? <InPlaceEditor component={componentToEditInPlace} onChange={onInPlacePropertyChange} /> : null}
+        {this.renderInPlaceEditor()}
       </svg>
     );
   }
 
-  onZoom = ({ zoomFactor }) => {
-    this.setState({
-      zoomFactor: zoomFactor
-    });
+  renderInPlaceEditor() {
+    const component = this.props.componentToEditInPlace;
+    if (component) {
+      return (
+        <InPlaceEditor component={component} onChange={this.props.onInPlacePropertyChange} />
+      );
+    }
   }
 
   componentDidMount() {

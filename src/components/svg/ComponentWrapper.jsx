@@ -4,7 +4,6 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import classnames from 'classnames';
 import shouldPureComponentUpdate from '../../util/shouldPureComponentUpdate';
 
-import InPlaceEditor from '../property-editors/InPlace.jsx';
 import Resizable from './Resizable.jsx';
 import * as components from '../../mockup-components';
 

@@ -25,7 +25,7 @@ function getTransform(el) {
   return transform;
 }
 
-function getZoomTransform(el, zoomX, zoomY, zoomFactor) {
+function getZoomMatrix(el, zoomX, zoomY, zoomFactor) {
   // from https://github.com/anvaka/panzoom (MIT)
   const transform = getTransform(el);
   const parent = el.ownerSVGElement;
@@ -35,26 +35,28 @@ function getZoomTransform(el, zoomX, zoomY, zoomFactor) {
 
   const x = zoomX * parentCTM.a - parentCTM.e;
   const y = zoomY * parentCTM.a - parentCTM.f;
-
-  return {
+  return [
     scale,
-    transform: 'matrix(' + [
-      scale,
-      transform.matrix.b,
-      transform.matrix.c,
-      scale,
-      x - zoomFactor * (x - transform.matrix.e),
-      y - zoomFactor * (y - transform.matrix.f)
-    ].join(' ') + ')'
-  };
+    transform.matrix.b,
+    transform.matrix.c,
+    scale,
+    x - zoomFactor * (x - transform.matrix.e),
+    y - zoomFactor * (y - transform.matrix.f)
+  ];
 }
+
 
 export default class PanZoom extends Component {
 
   static propTypes = {
     zoomSpeed: PropTypes.number,
-    onZoom: PropTypes.func,
+    zoomMatrix: PropTypes.array.isRequired,
+    onZoom: PropTypes.func.isRequired,
+    onPan: PropTypes.func.isRequired,
+    onDoubleMiddleClick: PropTypes.func.isRequired,
     panMin: PropTypes.number,
+    panX: PropTypes.number.isRequired,
+    panY: PropTypes.number.isRequired,
     panHandle: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired
   }
@@ -67,21 +69,29 @@ export default class PanZoom extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      zoomTransform: '',
-      panX: 0,
-      panY: 0,
       panning: false,
       startX: 0,
       startY: 0,
+      panX: props.panX,
+      panY: props.panY,
       oldPanX: 0,
       oldPanY: 0,
       minReached: false
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      panX: nextProps.panX,
+      panY: nextProps.panY
+    });
+  }
+
   render() {
-    const { zoomTransform, panX, panY, panning } = this.state;
+    const { panX, panY, panning } = this.state;
     const dragStyles = { cursor: panning ? 'move' : 'default' };
+    const zoomTransform = 'matrix(' + this.props.zoomMatrix.join(' ') + ')';
+
     return (
       <DraggableCore
         allowAnyClick // enable all buttons, filter in drag callbacks
@@ -99,24 +109,11 @@ export default class PanZoom extends Component {
     );
   }
 
-  setScaleTransform(scale, transform) {
-    this.setState({
-      zoomTransform: transform
-    });
-    if (this.props.onZoom) {
-      this.props.onZoom({ zoomFactor: scale });
-    }
-  }
-
   onDoubleClick = (ev) => {
     if (ev.button !== 1) {
       return;
     }
-    this.setState({
-      panX: 0,
-      panY: 0
-    });
-    this.setScaleTransform(1, '');
+    this.props.onDoubleMiddleClick();
   }
 
   onDragStart = (ev, { position }) => {
@@ -172,6 +169,8 @@ export default class PanZoom extends Component {
       minReached: false,
       panning: false
     });
+    const { panX, panY } = this.state;
+    this.props.onPan(panX, panY);
   }
 
   onWheel = (ev) => {
@@ -179,7 +178,7 @@ export default class PanZoom extends Component {
     const zoomY = ev.clientY - this.state.panY;
     const zoomFactor = getZoomFactor(ev.deltaY, this.props.zoomSpeed);
 
-    const { scale, transform } = getZoomTransform(ev.currentTarget, zoomX, zoomY, zoomFactor);
-    this.setScaleTransform(scale, transform);
+    const matrix = getZoomMatrix(ev.currentTarget, zoomX, zoomY, zoomFactor);
+    this.props.onZoom(matrix);
   }
 }
