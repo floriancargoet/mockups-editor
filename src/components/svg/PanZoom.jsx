@@ -170,7 +170,9 @@ export default class PanZoom extends Component {
       panning: false
     });
     const { panX, panY } = this.state;
-    this.props.onPan(panX, panY);
+    if (panX !== this.props.panX || panY !== this.props.panY) {
+      this.props.onPan(panX, panY);
+    }
   }
 
   onWheel = (ev) => {
