@@ -159,9 +159,13 @@ export function addComponentToSelection(component) {
 };
 
 export function clearSelection() {
-  return dispatch => {
-    dispatch(UndoActions.save('Clear selection'));
-    dispatch(LLUIActions.hideInPlaceEditor());
-    dispatch(LLActions.clearSelection());
+  return (dispatch, getState) => {
+    const state = getState().present;
+    const mockup = state.mockups[state.currentMockup];
+    if (mockup && mockup.selection.length > 0) {
+      dispatch(UndoActions.save('Clear selection'));
+      dispatch(LLUIActions.hideInPlaceEditor());
+      dispatch(LLActions.clearSelection());
+    }
   };
 };
