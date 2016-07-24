@@ -5,7 +5,7 @@
    - on/off, icon button
    - radio, select, datepicker, fieldset
    - label, line (auto width), list, link, breadcrumbs
-   - shapes, hr, vr, splitters, sliders
+   - shapes, splitters, sliders
    - tabs, window, accordion
    - data grid, menu, searchbox
  - better components
@@ -24,6 +24,7 @@
  - grid
  - reuse group as custom component
  - alignment during resize
+ - alignment based on content, not resize box
 
 ## Could have
  - transformations?
