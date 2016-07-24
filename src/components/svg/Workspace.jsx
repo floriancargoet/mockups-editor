@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-dnd';
 import { default as TouchBackend } from 'react-dnd-touch-backend';
 import CustomDragLayer from '../../connectors/svg/dnd/CustomDragLayer';
 import PanZoom from './PanZoom.jsx';
-import InPlaceEditor from '../property-editors/InPlace.jsx';
+import InPlaceEditor from '../InPlaceEditor.jsx';
 import ComponentsContainer from '../../connectors/svg/ComponentsContainer';
 
 

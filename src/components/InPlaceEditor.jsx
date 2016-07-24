@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import getInPlaceProperty from '../../util/getInPlaceProperty';
+import getInPlaceProperty from '../util/getInPlaceProperty';
 /*
  * This editor is different. It's not displayed in the property editor but in an
  * overlay over the Workspace. It receives the whole component.
