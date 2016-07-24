@@ -1,14 +1,10 @@
 export const UI_PAN = 'UI_PAN';
-export const UI_ZOOM = 'UI_ZOOM';
+export const UI_PANZOOM = 'UI_PANZOOM';
 export const UI_PANZOOM_RESET = 'UI_PANZOOM_RESET';
 export const UI_SET_IN_PLACE_EDITOR = 'UI_SET_IN_PLACE_EDITOR';
 
-export function pan(x, y) {
-  return { type: UI_PAN, x, y };
-}
-
-export function zoom(matrix) {
-  return { type: UI_ZOOM, matrix };
+export function panZoom(matrix) {
+  return { type: UI_PANZOOM, matrix };
 }
 
 export function resetPanZoom() {

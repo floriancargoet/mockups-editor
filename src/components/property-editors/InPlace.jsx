@@ -16,18 +16,21 @@ export default class InPlace extends Component {
 
   static propTypes = {
     component: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    panZoomMatrix: PropTypes.array.isRequired
   };
 
   render() {
-    const component = this.props.component;
+    const { component, panZoomMatrix } = this.props;
     const property = getInPlaceProperty(component.type);
     const value = component.properties[property];
     let { width, height, x, y } = component;
     width = Math.max(150, width);
     height = Math.max(150, height);
+    x = x * panZoomMatrix[0] + panZoomMatrix[4];
+    y = y * panZoomMatrix[0] + panZoomMatrix[5];
     return (
-      <g transform={`translate(${x + 5}, ${y + 5})`}>
+      <g transform={`translate(${x}, ${y})`}>
         <foreignObject width={width} height={height}>
           <textarea style={style} value={value} onChange={this.onChange}></textarea>
         </foreignObject>

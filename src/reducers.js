@@ -17,7 +17,7 @@ import {
   ADD_MOCKUP, SELECT_MOCKUP, RENAME_MOCKUP
 } from './actions/low-level/actions';
 
-import { UI_PAN, UI_ZOOM, UI_PANZOOM_RESET, UI_SET_IN_PLACE_EDITOR } from './actions/low-level/UIActions';
+import { UI_PANZOOM, UI_PANZOOM_RESET, UI_SET_IN_PLACE_EDITOR } from './actions/low-level/UIActions';
 
 
 function cascadeUpdateChildren(item, cb) {
@@ -76,9 +76,7 @@ function callRootPropertyUpdater(component, property, value) {
     name: "",
     ui: {
       inPlaceEdit: id,
-      panX: 0,
-      panY: 0,
-      zoomFactor: 1
+      panZoomMatrix: [1, 0, 0, 1, 0, 0]
     },
     components: [component...],
     last: id,
@@ -100,23 +98,18 @@ function ui(state, action) {
   if (!state) {
     state = {
       inPlaceEdit: null,
-      panX: 0,
-      panY: 0,
-      zoomMatrix: [1, 0, 0, 1, 0, 0]
+      panZoomMatrix: [1, 0, 0, 1, 0, 0]
     };
   }
   switch (action.type) {
     case UI_SET_IN_PLACE_EDITOR: {
       return { ...state, inPlaceEdit: action.id };
     }
-    case UI_PAN: {
-      return { ...state, panX: action.x, panY: action.y };
-    }
-    case UI_ZOOM: {
-      return { ...state, zoomMatrix: action.matrix };
+    case UI_PANZOOM: {
+      return { ...state, panZoomMatrix: action.matrix };
     }
     case UI_PANZOOM_RESET: {
-      return { ...state, zoomMatrix: [1, 0, 0, 1, 0, 0], panX: 0, panY: 0 };
+      return { ...state, panZoomMatrix: [1, 0, 0, 1, 0, 0]};
     }
     default:
       return state;

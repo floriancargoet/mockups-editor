@@ -11,9 +11,7 @@ const mapStateToProps = (state) => {
   const componentToEditInPlace = mockup.components.find(c => c.id === ui.inPlaceEdit);
   return {
     componentToEditInPlace,
-    panX: ui.panX,
-    panY: ui.panY,
-    zoomMatrix: ui.zoomMatrix
+    panZoomMatrix: ui.panZoomMatrix
   };
 };
 
@@ -23,12 +21,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(updateComponentProperty(component, property, value));
     },
 
-    onPan: function (x, y) {
-      dispatch(UIActions.pan(x, y));
-    },
-
-    onZoom: function (matrix) {
-      dispatch(UIActions.zoom(matrix));
+    onPanZoom: function (matrix) {
+      dispatch(UIActions.panZoom(matrix));
     },
 
     onDoubleMiddleClick: function () {

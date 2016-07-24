@@ -15,11 +15,8 @@ class Workspace extends Component {
   static propTypes = {
     componentToEditInPlace: PropTypes.object,
     onInPlacePropertyChange: PropTypes.func.isRequired,
-    zoomMatrix: PropTypes.array.isRequired,
-    panX: PropTypes.number.isRequired,
-    panY: PropTypes.number.isRequired,
-    onPan: PropTypes.func.isRequired,
-    onZoom: PropTypes.func.isRequired,
+    panZoomMatrix: PropTypes.array.isRequired,
+    onPanZoom: PropTypes.func.isRequired,
     onDoubleMiddleClick: PropTypes.func.isRequired
   };
 
@@ -33,14 +30,13 @@ class Workspace extends Component {
 
   render() {
     const { width, height } = this.state;
-    const { zoomMatrix, panX, panY, onZoom, onPan, onDoubleMiddleClick } = this.props;
-    const zoomFactor = zoomMatrix[0];
+    const { panZoomMatrix, onPanZoom, onDoubleMiddleClick } = this.props;
+    const zoomFactor = panZoomMatrix[0];
     return (
       <svg height="100%" width="100%">
         <PanZoom
-          zoomSpeed={0.2} panHandle=".background"
-          zoomMatrix={zoomMatrix} panX={panX} panY={panY}
-          onZoom={onZoom} onPan={onPan} onDoubleMiddleClick={onDoubleMiddleClick}
+          zoomSpeed={0.2} panZoomMatrix={panZoomMatrix} panHandle=".background"
+          onPanZoom={onPanZoom} onDoubleMiddleClick={onDoubleMiddleClick}
         >
           <ComponentsContainer width={width} height={height} zoomFactor={zoomFactor} />
           <CustomDragLayer zoomFactor={zoomFactor} />
@@ -54,7 +50,10 @@ class Workspace extends Component {
     const component = this.props.componentToEditInPlace;
     if (component) {
       return (
-        <InPlaceEditor component={component} onChange={this.props.onInPlacePropertyChange} />
+        <InPlaceEditor
+          component={component} panZoomMatrix={this.props.panZoomMatrix}
+          onChange={this.props.onInPlacePropertyChange}
+        />
       );
     }
   }

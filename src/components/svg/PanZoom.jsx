@@ -25,7 +25,7 @@ function getTransform(el) {
   return transform;
 }
 
-function getZoomMatrix(el, zoomX, zoomY, zoomFactor) {
+function getZoomedMatrix(el, zoomX, zoomY, zoomFactor) {
   // from https://github.com/anvaka/panzoom (MIT)
   const transform = getTransform(el);
   const parent = el.ownerSVGElement;
@@ -50,13 +50,10 @@ export default class PanZoom extends Component {
 
   static propTypes = {
     zoomSpeed: PropTypes.number,
-    zoomMatrix: PropTypes.array.isRequired,
-    onZoom: PropTypes.func.isRequired,
-    onPan: PropTypes.func.isRequired,
+    panZoomMatrix: PropTypes.array.isRequired,
+    onPanZoom: PropTypes.func.isRequired,
     onDoubleMiddleClick: PropTypes.func.isRequired,
     panMin: PropTypes.number,
-    panX: PropTypes.number.isRequired,
-    panY: PropTypes.number.isRequired,
     panHandle: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired
   }
@@ -70,27 +67,14 @@ export default class PanZoom extends Component {
     super(props);
     this.state = {
       panning: false,
-      startX: 0,
-      startY: 0,
-      panX: props.panX,
-      panY: props.panY,
-      oldPanX: 0,
-      oldPanY: 0,
       minReached: false
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      panX: nextProps.panX,
-      panY: nextProps.panY
-    });
-  }
-
   render() {
-    const { panX, panY, panning } = this.state;
+    const { panning } = this.state;
     const dragStyles = { cursor: panning ? 'move' : 'default' };
-    const zoomTransform = 'matrix(' + this.props.zoomMatrix.join(' ') + ')';
+    const zoomTransform = 'matrix(' + this.props.panZoomMatrix.join(' ') + ')';
 
     return (
       <DraggableCore
@@ -100,10 +84,11 @@ export default class PanZoom extends Component {
         onStop={this.onDragStop}
         handle={this.props.panHandle}
       >
-        <g transform={`translate(${panX}, ${panY})`} style={dragStyles} onDoubleClick={this.onDoubleClick}>
-          <g transform={zoomTransform} onWheel={this.onWheel}>
-            {this.props.children}
-          </g>
+        <g transform={zoomTransform} style={dragStyles}
+          onDoubleClick={this.onDoubleClick}
+          onWheel={this.onWheel}
+        >
+          {this.props.children}
         </g>
       </DraggableCore>
     );
@@ -123,10 +108,6 @@ export default class PanZoom extends Component {
     }
 
     this.setState({
-      startX: position.clientX,
-      startY: position.clientY,
-      oldPanX: this.state.panX,
-      oldPanY: this.state.panY,
       minReached: false,
       panning: true
     });
@@ -137,50 +118,37 @@ export default class PanZoom extends Component {
       ev.preventDefault();
       return;
     }
-    const dx = position.clientX - this.state.startX;
-    const dy = position.clientY - this.state.startY;
+
+    const dx = position.deltaX;
+    const dy = position.deltaY;
 
     let minReached = this.state.minReached;
 
     if (!minReached) {
       minReached = (dx * dx + dy * dy >= this.props.panMin * this.props.panMin);
     }
-
-    if (minReached) {
-      this.setState({
-        panX: this.state.oldPanX + dx,
-        panY: this.state.oldPanY + dy,
-        minReached: minReached
-      });
-    }
     else {
-      this.setState({
-        minReached: minReached
-      });
+      const [a, b, c, d, e, f] = this.props.panZoomMatrix;
+      const matrix = [a, b, c, d, e + dx, f + dy];
+      this.props.onPanZoom(matrix);
     }
+
+    this.setState({
+      minReached: minReached
+    });
+
   }
 
   onDragStop = (ev, { position }) => {
     this.setState({
-      startX: 0,
-      startY: 0,
-      oldPanX: 0,
-      oldPanY: 0,
       minReached: false,
       panning: false
     });
-    const { panX, panY } = this.state;
-    if (panX !== this.props.panX || panY !== this.props.panY) {
-      this.props.onPan(panX, panY);
-    }
   }
 
   onWheel = (ev) => {
-    const zoomX = ev.clientX - this.state.panX;
-    const zoomY = ev.clientY - this.state.panY;
     const zoomFactor = getZoomFactor(ev.deltaY, this.props.zoomSpeed);
-
-    const matrix = getZoomMatrix(ev.currentTarget, zoomX, zoomY, zoomFactor);
-    this.props.onZoom(matrix);
+    const matrix = getZoomedMatrix(ev.currentTarget, ev.clientX, ev.clientY, zoomFactor);
+    this.props.onPanZoom(matrix);
   }
 }

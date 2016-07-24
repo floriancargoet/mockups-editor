@@ -35,3 +35,4 @@
 
 ## Technical tasks
  - dedicated interactions layer (dnd, resize, ...)
+ - optimize pan rerender
